@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.study.springboot.dao.IMemberDao"> 
+
+	<insert id="insertMemberDao" parameterType="com.study.springboot.dto.MemberDto">
+      insert into blog_member (id, password, name, mail)
+           values (#{id}, #{password}, #{name}, #{mail})
+   </insert>
+   
+	
+	
+	<select id="loginCheckDao" resultType="_int">
+		select count(*) from blog_member where id = #{id} and password = #{pw}
+	</select>
+	
+	<select id="FindIdDao" parameterType="com.study.springboot.dto.MemberDto" resultType="String">
+		select id from blog_member where name = #{name} and mail = #{mail}
+	</select>
+	
+	<select id="FindPwDao" parameterType="com.study.springboot.dto.MemberDto" resultType="String">
+		select password from blog_member where id = #{id} and name = #{name} and mail = #{mail}
+	</select>
+	<select id="getUserInfoDao" resultType="com.study.springboot.dto.MemberDto"> 
+		select * from blog_member where id = #{id}
+	</select>
+	
+	<update id="updateMemberDao" parameterType="com.study.springboot.dto.MemberDto" >
+        update blog_member set password = #{password}, name = #{name}, gender = #{gender}, mail =  #{mail}, phone =  #{phone}, bio = #{bio}  where id = #{id}
+   	</update>
+	<!-- "_int" int -->
+	<!-- "int" Integer -->
+	<!-- 
+			
+	#{param1}을 #{id}로 사용하려면 Mapper Class에서 
+	@Param("id") String id; 로 지정해야됨.
+	<select id="idCheckDao" resultType="_int"> 
+		select count(*) from blog_member where id = #{id}
+	</select>
+	
+	
+	
+	<select id="userListDao" resultType="com.study.springboot.dto.MemberDto"> 
+		select * from blog_member order by id desc
+	</select>  -->
+	
+</mapper>
+
