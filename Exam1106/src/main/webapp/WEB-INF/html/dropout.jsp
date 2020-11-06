@@ -10,6 +10,18 @@
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <script type="text/javascript">
+		// 비밀번호 미입력시 경고창
+		function checkValue(){
+			if(!document.dropout.Password.value){
+				alert("비밀번호를 입력하지 않았습니다.");
+				return false;
+			}else if(document.dropout.Password.value != document.dropout.CheckPassword.value){
+				alert("비밀번호가 알맞지 않습니다.");
+				return false;
+				}
+		}
+	</script>
 </head>
 <body>
   <main id="dropout">
@@ -17,22 +29,18 @@
       <div class="login__column">
         <div class="login__box">
           <span>회원 탈퇴</span>
-          <form action="feed.html" method="post" class="login__form">
+          <form action="dropoutAction" name="dropout" method="post" class="login__form">
             
             <input type="password" name="password" placeholder="Password" required>
             <input type="password" name="checkPassword" placeholder="CheckPassword" required>
-            <input type="submit" value="submit">
+            <input type="submit" value="탈퇴하기">
           </form>
           <span class="login__divider">
             or
           </span>
-          <a href="#" class="login__small-link">back to main</a>
+          <a href="main" class="login__small-link">메인으로</a>
         </div>
-        <div class="login__box">
-          <span class="login__text">
-            good bye <br />
-          </span>
-        </div>
+        
         <div class="login__t-box">
 
         </div>

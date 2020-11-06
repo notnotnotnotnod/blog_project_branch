@@ -59,7 +59,11 @@
           <img src="images/avatar.jpg" />
         </div>
         <!-- master comments -->
-        <h1 class="edit-profile__username"><%=member.getName() %></h1>
+        <h1 class="edit-profile__username"><%=member.getName() %>
+          <form action="dropout">
+          <input type="submit" value="회원탈퇴" style="float: right;">
+        </form>
+      </h1>
       </header>
 
       <form class="edit-profile__form" action="membermodify" method="post" onsubmit="checkValue()" name="userInfo">

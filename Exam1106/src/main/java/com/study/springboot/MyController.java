@@ -1,8 +1,5 @@
 package com.study.springboot;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -24,8 +21,10 @@ import com.study.springboot.service.IMemberService;
 
 @Controller
 public class MyController {
+	
 	@Autowired
 	IMemberService member_service;
+	
 	
 	@Autowired
 	IBoardService board_service;
@@ -75,7 +74,7 @@ public class MyController {
 		
 		int nResult = member_service.insertMember( req );
 		if( nResult <= 0 ) {
-			System.out.println("회원가입 실패!");
+			System.out.println("회원가입 실패");
 			
 	        model.addAttribute("msg","회원가입 실패");
 	        model.addAttribute("url","/");
@@ -241,6 +240,31 @@ public class MyController {
 	public String dropout() throws Exception {
 		return "dropout";
 	}
+	@RequestMapping("/dropoutAction")
+	public String dropoutAction(HttpServletRequest req, Model model) throws Exception {
+		
+		HttpSession session = req.getSession();
+		String id = (String)session.getAttribute("sessionID");
+		String password = req.getParameter("password");
+		
+		int nResult = member_service.deleteMember(id, password);
+		
+		if( nResult <= 0 ) {
+			System.out.println("회원탈퇴 실패");
+			
+			model.addAttribute("msg","회원탈퇴 실패");
+			model.addAttribute("url","/ModifyFrom");
+		}else {
+			System.out.println("회원탈퇴 성공");
+			
+			session.invalidate(); // 회원정보 담긴 세션 삭제 - 로그아웃함.
+			
+			model.addAttribute("msg","회원탈퇴 성공");
+			model.addAttribute("url","/");
+		}
+		return "dropout";
+	}
+	
 	@RequestMapping("/write")
 	public String write() throws Exception {
 		return "write";

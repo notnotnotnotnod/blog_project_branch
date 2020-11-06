@@ -16,6 +16,7 @@ public class MemberService implements IMemberService {
 
 	@Autowired
 	IMemberDao memberDao;
+	
 	@Autowired
 	MemberDto memberDto;
 
@@ -82,7 +83,13 @@ public class MemberService implements IMemberService {
 		String nResult = memberDao.FindPwDao(id, name, mail);
 		return nResult;
 	}
-	
+	@Override
+	public int deleteMember(String id, String pw) {
+
+		int nResult = memberDao.deleteMemberDao(id, pw);
+
+		return nResult;
+	}
 	/*
 	 * @Override public MemberDto getUserInfo(String id) { return
 	 * memberDao.getUserInfoDao(id); }
