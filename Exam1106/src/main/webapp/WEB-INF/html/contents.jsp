@@ -21,7 +21,7 @@
             <input type="hidden" name="bstep" value="${reply_view.bstep}">
             <input type="hidden" name="bindent" value="${reply_view.bindent}">
             <tr>
-                <td> 번호 </td>
+                <td> 번호!!!!!!!!!!!!!!! </td>
                 <td> ${reply_view.bid} </td>
             </tr>
             <tr>
