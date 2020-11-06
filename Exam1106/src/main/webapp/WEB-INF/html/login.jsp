@@ -28,7 +28,7 @@
           <span class="login__divider">
             or
           </span>
-          <a href="findId" class="login__small-link">아이디찾기</a>
+          <a href="findId" class="login__small-link">아이디찾기123</a>
           <br>
           <a href="findPw" class="login__small-link">비밀번호찾기</a>
         </div>
