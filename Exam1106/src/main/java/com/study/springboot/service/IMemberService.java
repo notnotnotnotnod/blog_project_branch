@@ -15,6 +15,7 @@ public interface IMemberService {
 	public String FindId(String name, String mail);
 	public String FindPw(String id, String name, String mail);
 //	public ArrayList<MemberDto> userList();
-//	public int idCheck(String id);
+	public int idCheck(String id);
+	public int mailCheck(String mail);
 //	public int logoutDao();
 }

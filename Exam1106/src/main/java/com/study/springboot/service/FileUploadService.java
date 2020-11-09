@@ -3,8 +3,6 @@ package com.study.springboot.service;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;

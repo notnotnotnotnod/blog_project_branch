@@ -7,20 +7,20 @@
 <mapper namespace="com.study.springboot.dao.IBoardDao"> 
 	
    	<insert id="write" parameterType="com.study.springboot.dto.BoardDto">
-    	insert into blog_board (bname, bcontent, bhit, bgroup, bstep, bindent) 
-      		values (#{bname, jdbcType=VARCHAR}, #{bcontent, jdbcType=VARCHAR}, 0, 0, 0, 0 )
+    	insert into blog_board (bname, bcontent, bno) 
+      		values (#{bname}, #{bcontent}, blog_board_seq.nextval)
    	</insert>
    	<select id="list" resultType="com.study.springboot.dto.BoardDto"> 
 		select * from blog_board order by bgroup desc, bstep asc
    	</select> 
    	<select id="contentView" resultType="com.study.springboot.dto.BoardDto"> 
-		select * from blog_board where bid=#{param1}
+		select * from blog_board where bname=#{param1}
    	</select>
    	<update id="modify" parameterType="com.study.springboot.dto.BoardDto" >
         update blog_board set bname=#{param2}, btitle=#{param3}, bcontent=#{param4} where bid=#{param1}
    	</update>
    	<delete id="delete">
-		delete from blog_board where bid=#{param1}
+		delete from blog_board where bname=#{param1}
 	</delete>
    	<select id="reply_view" resultType="com.study.springboot.dto.BoardDto"> 
 		select * from blog_board where bid=#{param1}
