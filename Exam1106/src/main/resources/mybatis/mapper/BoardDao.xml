@@ -11,7 +11,7 @@
       		values (#{bname}, #{bcontent}, blog_board_seq.nextval)
    	</insert>
    	<select id="list" resultType="com.study.springboot.dto.BoardDto"> 
-		select * from blog_board order by bgroup desc, bstep asc
+		select * from blog_board order by bno desc
    	</select> 
    	<select id="contentView" resultType="com.study.springboot.dto.BoardDto"> 
 		select * from blog_board where bname=#{param1}

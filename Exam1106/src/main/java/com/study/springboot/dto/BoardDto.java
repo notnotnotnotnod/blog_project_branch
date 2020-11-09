@@ -9,6 +9,7 @@ import lombok.Data;
 @Component
 @Data
 public class BoardDto {
+	private int bno;
 	private int bid;
     private String bname;
     private String bcontent;

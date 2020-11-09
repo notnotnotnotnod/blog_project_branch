@@ -1,5 +1,7 @@
 package com.study.springboot.service;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -120,11 +122,22 @@ public class MemberService implements IMemberService {
 		int nResult =  memberDao.idCheckDao(id);
 		return nResult; 
 		}
+	
+	
 	@Override 
 	public int mailCheck(String mail) { 
 		int nResult =  memberDao.mailCheckDao(mail);
 		return nResult; 
 		}
+	
+	
+	@Override
+	public ArrayList<MemberDto> userList() { 
+		ArrayList<MemberDto> list = memberDao.userListDao();
+		return list; 
+		}
+	
+	
 	
 	/*
 	 * @Override public MemberDto getUserInfo(String id) { return
@@ -148,8 +161,7 @@ public class MemberService implements IMemberService {
 	 * 
 	 * 
 	 * 
-	 * @Override public ArrayList<MemberDto> userList() { ArrayList<MemberDto> list
-	 * = memberDao.userListDao(); return list; }
+	 * 
 	 * 
 	 * 
 	 * 

@@ -18,7 +18,7 @@ public interface IMemberDao
 	public int loginCheckDao(@Param("id") String id, @Param("pw") String pw);
 	public String FindIdDao(@Param("name") String name, @Param("mail") String mail);
 	public String FindPwDao(@Param("id") String id, @Param("name") String name, @Param("mail") String mail);
-//	public ArrayList<MemberDto> userListDao();
+	public ArrayList<MemberDto> userListDao();
 	public int idCheckDao(@Param("id") String id);
 	public int mailCheckDao(@Param("mail") String mail);
 }
