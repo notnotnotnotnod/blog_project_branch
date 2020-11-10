@@ -25,6 +25,8 @@ import com.study.springboot.service.IReplyService;
 
 
 
+
+
 @Controller
 public class MyController {
 	
@@ -165,7 +167,7 @@ public class MyController {
 		System.out.println( "userID:" + req.getParameter("id"));
 		
 		
-		int nResult = member_service.idCheck( req.getParameter("id") );
+		int nResult = member_service.idCheck((String)req.getParameter("id"));
 		if( nResult > 0 ) {
 			System.out.println("중복된 아이디 있음");
 			
