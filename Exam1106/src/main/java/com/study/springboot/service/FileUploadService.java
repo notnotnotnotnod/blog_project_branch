@@ -31,7 +31,7 @@ public class FileUploadService {
 	private static String SAVE_PATH = "/upload/"; // 디폴트는 C:/upload폴더에 생성됨.
 	private static String PREFIX_URL = "/upload/";
 
-
+	String filename;
 	public String restore(MultipartFile multipartFile,String name,String number) {
 
 
@@ -49,9 +49,9 @@ public class FileUploadService {
 
 
 			// 서버에서 저장 할 파일 이름
-			String saveFileName = name+"_"+number+"_"+genSaveFileName(extName);
+			filename = name+"_"+number+"_"+genSaveFileName(extName);
 
-			writeFile(multipartFile, saveFileName);
+			writeFile(multipartFile, filename);
 
 		} catch (IOException e) {
 			// 원래라면 RuntimeException 을 상속받은 예외가 처리되어야 하지만
@@ -60,6 +60,11 @@ public class FileUploadService {
 			throw new RuntimeException(e);
 		}
 		return "main";
+	}
+	
+	public String getname() {
+		
+		return filename;
 	}
 
 	int i = 1;
