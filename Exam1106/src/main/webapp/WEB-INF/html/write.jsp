@@ -63,7 +63,7 @@
 					<td>
 					<input id="input_img" type="file" name="filename" multiple="multiple" ></td>
 					<c:forEach var="dto" items="${list}" >
-					<input id="number" name="number" type="hidden"	value="${dto.bno}" />						
+					<input id="number" name="number" type="hidden"	value="${dto.bno+1}" />						
 					</c:forEach>
 					</tr>
 					<tr>
