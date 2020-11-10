@@ -17,5 +17,5 @@ public interface IMemberService {
 	public ArrayList<MemberDto> userList();
 	public int idCheck(String id);
 	public int mailCheck(String mail);
-//	public int logoutDao();
+	public int logoutDao();
 }

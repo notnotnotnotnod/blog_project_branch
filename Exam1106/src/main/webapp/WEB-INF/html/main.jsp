@@ -233,6 +233,7 @@
                     <img src="http://placehold.it/150x150" alt="프로필사진">
                     <span class="photo__username aside" name = "id"><%= session.getAttribute("sessionID") %></span>
                     <a class="btn btn-primary" href="write" role="button" style="float: right;">글쓰기</a>
+                    <a class="btn btn-primary" href="LogoutAction" role="button" style="float: right;">로그아웃</a>
                     </div>
                     <br>
                     <div style="border: 1px solid black; height: 5cm;">

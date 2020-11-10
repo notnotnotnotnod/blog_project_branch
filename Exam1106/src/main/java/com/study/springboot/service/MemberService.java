@@ -143,7 +143,10 @@ public class MemberService implements IMemberService {
 		return list; 
 		}
 	
-	
+	@Override 
+	public int logoutDao() { 
+		return 1; //항상 성공 
+		}
 	
 	/*
 	 * @Override public MemberDto getUserInfo(String id) { return
@@ -171,7 +174,7 @@ public class MemberService implements IMemberService {
 	 * 
 	 * 
 	 * 
-	 * @Override public int logoutDao() { return 1; //항상 성공 }
+	 * 
 	 */
 
 

@@ -31,8 +31,7 @@ import com.study.springboot.service.IReplyService;
 public class MyController {
 	
 	@Autowired
-	IMemberService member_service;
-	
+	IMemberService member_service;	
 	
 	@Autowired
 	IBoardService board_service;
@@ -128,6 +127,28 @@ public class MyController {
 		return "redirect";
 		 //redirect.jsp
 		}
+	
+	@RequestMapping("/LogoutAction")
+	public String MemberLogoutAction(HttpServletRequest req, Model model) {
+		int nResult = member_service.logoutDao();
+		if( nResult <= 0 ) {
+			System.out.println("로그아웃 실패");
+			
+	        model.addAttribute("msg","로그아웃 실패");
+	        model.addAttribute("url","/");
+		}else {
+			System.out.println("로그아웃 성공");
+			
+			// 로그아웃시 세션정보를 모두 삭제한다.
+			req.getSession().invalidate();
+			
+			model.addAttribute("msg","로그아웃 성공");
+            model.addAttribute("url","/login");
+		}
+		
+		return "redirect"; //redirect.jsp
+	}
+	
 		@RequestMapping("/mypage")
 	public String mypage(HttpServletRequest req) {
 		String id = req.getSession().getAttribute("sessionID").toString();
