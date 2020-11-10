@@ -138,7 +138,7 @@
 
                     <div>
                         <a href="#"><span>해쉬태그</span></a>
-                        <a href="coment"><span>댓글 더보기</span></a>
+                        <a href="coment?bno=2"><span>댓글 더보기</span></a>
                         <hr>
                     </div>
                     <ul class="photo__comments">

@@ -17,9 +17,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.study.springboot.dto.BoardDto;
 import com.study.springboot.dto.MemberDto;
+import com.study.springboot.dto.ReplyDto;
 import com.study.springboot.service.FileUploadService;
 import com.study.springboot.service.IBoardService;
 import com.study.springboot.service.IMemberService;
+import com.study.springboot.service.IReplyService;
 
 
 
@@ -32,6 +34,9 @@ public class MyController {
 	
 	@Autowired
 	IBoardService board_service;
+	
+	@Autowired
+	IReplyService reply_service;
 	
 	@Autowired
 	FileUploadService fileUploadService;
@@ -274,7 +279,13 @@ public class MyController {
 		}
 
 	@RequestMapping("/coment")
-	public String coment() throws Exception {
+	public String coment(HttpServletRequest req) throws Exception {
+		
+		ArrayList<ReplyDto> rlist = reply_service.rlist();
+		System.out.println("댓글리스트:" + rlist);
+		
+		req.getSession().setAttribute("listBoard", rlist);
+		
 		return "coment";
 	}
 	@RequestMapping("/contents")
@@ -326,16 +337,16 @@ public class MyController {
 		
 		req.setCharacterEncoding("utf-8"); // 인코딩
 		
-        String bid = req.getParameter("bid");
-        String bname = req.getParameter("bname");
-        String bcontent = req.getParameter("bcontent");
+//        String bno = req.getParameter("bno");
+        String rname = req.getParameter("rname");
+        String rcontent = req.getParameter("rcontent");
         
-		int nResult = board_service.reply(bid, bname, bcontent);
+		int nResult = reply_service.reply(rname, rcontent);
 		if( nResult <= 0 ) {
 			System.out.println("댓글작성 실패");
 			
 	        model.addAttribute("msg","댓글작성 실패");
-	        model.addAttribute("url","/main");
+	        model.addAttribute("url","/coment");
 		}else {
 			System.out.println("댓글작성 성공");
 			
