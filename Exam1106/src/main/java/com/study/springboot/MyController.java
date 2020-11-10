@@ -91,15 +91,15 @@ public class MyController {
 			System.out.println("회원가입 실패");
 			
 	        model.addAttribute("msg","회원가입 실패");
-	        model.addAttribute("url","/");
+	        model.addAttribute("url","/join");
 		}else {
 			System.out.println("회원가입 성공");
 			
 			model.addAttribute("msg","회원가입 성공");
-            model.addAttribute("url","/");
+            model.addAttribute("url","/login");
 		}
 		
-		return "login";
+		return "redirect";
 	}
 	
 	@RequestMapping("/MemberLoginAction")
@@ -113,7 +113,7 @@ public class MyController {
 			
 	        model.addAttribute("msg","로그인 실패 - 아이디나 암호를 확인해주세요");
 	        model.addAttribute("url","/login");
-	        return "login";
+
 		}else {
 			System.out.println("로그인 성공");
 			
@@ -123,8 +123,9 @@ public class MyController {
 			
 			model.addAttribute("msg","로그인 성공");
             model.addAttribute("url","/main");
-            return "main";
+
 		}
+		return "redirect";
 		 //redirect.jsp
 		}
 		@RequestMapping("/mypage")
@@ -150,16 +151,16 @@ public class MyController {
 			System.out.println("회원수정 실패");
 			
 			model.addAttribute("msg","회원수정 실패");
-			model.addAttribute("url","/ModifyFrom");
-			return "mypage";
+			model.addAttribute("url","/mypage");
+
 		}else {
 			System.out.println("회원수정 성공");
 			
 			model.addAttribute("msg","회원수정 성공");
-			model.addAttribute("url","/UserInfoForm");
-			return "main";
+			model.addAttribute("url","/main");
+
 		}
-	
+	return "redirect";
 	}
 	@RequestMapping(value="/IdCheckAction", method=RequestMethod.GET)
 	public @ResponseBody String IdCheckAction(HttpServletRequest req, Model model) {
@@ -227,16 +228,16 @@ public class MyController {
 			System.out.println("글쓰기 실패");
 			
 	        model.addAttribute("msg","글쓰기 실패");
-	        model.addAttribute("url","/");
+	        model.addAttribute("url","/write");
 		}else {
 			System.out.println("글쓰기 성공");
 			
 			model.addAttribute("msg","글쓰기 성공");
-            model.addAttribute("url","/");
+            model.addAttribute("url","/main");
 		}
 		
 		
-		return "main";
+		return "redirect";
 	}
 
 
@@ -316,16 +317,18 @@ public class MyController {
 			System.out.println("회원탈퇴 실패");
 			
 			model.addAttribute("msg","회원탈퇴 실패");
-			model.addAttribute("url","/ModifyFrom");
+			model.addAttribute("url","/dropout");
+
 		}else {
 			System.out.println("회원탈퇴 성공");
 			
 			session.invalidate(); // 회원정보 담긴 세션 삭제 - 로그아웃함.
 			
 			model.addAttribute("msg","회원탈퇴 성공");
-			model.addAttribute("url","/");
+			model.addAttribute("url","/login");
+
 		}
-		return "dropout";
+		return "redirect";
 	}
 	
 	@RequestMapping("/write")

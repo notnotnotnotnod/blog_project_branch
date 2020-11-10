@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.study.springboot.dao.IReplyDao;
-import com.study.springboot.dto.BoardDto;
 import com.study.springboot.dto.ReplyDto;
 
 @Service
@@ -34,5 +33,12 @@ public class ReplyService implements IReplyService{
 		ArrayList<ReplyDto> rlist = replyDao.rlist();
 		return rlist;
 	}
+
+	@Override
+	public int delete(String rname) {
+		
+		return replyDao.delete(rname);
+	}
+	
 
 }

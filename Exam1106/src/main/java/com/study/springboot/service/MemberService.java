@@ -13,6 +13,7 @@ import org.springframework.transaction.TransactionStatus;
 
 import com.study.springboot.dao.IBoardDao;
 import com.study.springboot.dao.IMemberDao;
+import com.study.springboot.dao.IReplyDao;
 import com.study.springboot.dto.MemberDto;
 
 //@Service, @Controller, @Repository가 동일한 기능을 한다.
@@ -22,6 +23,9 @@ public class MemberService implements IMemberService {
 
 	@Autowired
 	IMemberDao memberDao;
+	
+	@Autowired
+	IReplyDao replyDao;
 	
 	@Autowired
 	IBoardDao boardDao;
@@ -106,6 +110,8 @@ public class MemberService implements IMemberService {
 			boardDao.delete(id);
 			
 			memberDao.deleteMemberDao(id, pw);
+			
+			replyDao.delete(id);
 			
 			transactionManager.commit(status);
 			return 1;
