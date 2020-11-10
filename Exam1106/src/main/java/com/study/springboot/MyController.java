@@ -206,6 +206,11 @@ public class MyController {
 		String number = req.getParameter("number");
 		for(int i=0;i<file.length;i++) {
 			String url = fileUploadService.restore(file[i],(String)session.getAttribute("sessionID"),number);
+			
+			//파일이름 불러오기 arraylist에 저장가능.
+			String name = fileUploadService.getname();
+			System.out.println("파일 "+(i+1)+"번째 이름 : "+name);
+			
 		}
 		ArrayList<BoardDto> list = board_service.list();
 		req.getSession().setAttribute("list", list);
