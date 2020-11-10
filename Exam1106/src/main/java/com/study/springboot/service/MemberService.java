@@ -1,11 +1,17 @@
 package com.study.springboot.service;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 
+import com.study.springboot.dao.IBoardDao;
 import com.study.springboot.dao.IMemberDao;
 import com.study.springboot.dto.MemberDto;
 
@@ -18,8 +24,16 @@ public class MemberService implements IMemberService {
 	IMemberDao memberDao;
 	
 	@Autowired
+	IBoardDao boardDao;
+	
+	@Autowired
 	MemberDto memberDto;
 
+	@Autowired
+	PlatformTransactionManager transactionManager;
+	@Autowired
+	TransactionDefinition definition;
+	
 	@Override
 	public int insertMember(HttpServletRequest req) {
 		
@@ -85,11 +99,46 @@ public class MemberService implements IMemberService {
 	}
 	@Override
 	public int deleteMember(String id, String pw) {
-
-		int nResult = memberDao.deleteMemberDao(id, pw);
-
-		return nResult;
+		TransactionStatus status = transactionManager.getTransaction(definition);
+		
+		try {
+			
+			boardDao.delete(id);
+			
+			memberDao.deleteMemberDao(id, pw);
+			
+			transactionManager.commit(status);
+			return 1;
+			
+		}catch(Exception e) {
+			System.out.println("오류발생");
+			transactionManager.rollback(status);
+			return 0;
+		}	
 	}
+	
+	@Override 
+	public int idCheck(String id) { 
+		int nResult =  memberDao.idCheckDao(id);
+		return nResult; 
+		}
+	
+	
+	@Override 
+	public int mailCheck(String mail) { 
+		int nResult =  memberDao.mailCheckDao(mail);
+		return nResult; 
+		}
+	
+	
+	@Override
+	public ArrayList<MemberDto> userList() { 
+		ArrayList<MemberDto> list = memberDao.userListDao();
+		return list; 
+		}
+	
+	
+	
 	/*
 	 * @Override public MemberDto getUserInfo(String id) { return
 	 * memberDao.getUserInfoDao(id); }
@@ -112,11 +161,9 @@ public class MemberService implements IMemberService {
 	 * 
 	 * 
 	 * 
-	 * @Override public ArrayList<MemberDto> userList() { ArrayList<MemberDto> list
-	 * = memberDao.userListDao(); return list; }
 	 * 
-	 * @Override public int idCheck(String id) { int nResult =
-	 * memberDao.idCheckDao(id); return nResult; }
+	 * 
+	 * 
 	 * 
 	 * @Override public int logoutDao() { return 1; //항상 성공 }
 	 */

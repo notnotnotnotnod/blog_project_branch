@@ -2,8 +2,7 @@ package com.study.springboot.service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +10,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.study.springboot.dao.IMemberDao;
+import com.study.springboot.dto.BoardDto;
 import com.study.springboot.dto.MemberDto;
 
 @Service
@@ -22,6 +22,9 @@ public class FileUploadService {
 	@Autowired
 	MemberDto memberDto;
 	
+	@Autowired
+	IBoardService board_service;
+	
 	// 리눅스 기준으로 파일 경로를 작성 ( 루트 경로인 /으로 시작한다. )
 	// 윈도우라면 workspace의 드라이브를 파악하여 JVM이 알아서 처리해준다.
 	// 따라서 workspace가 C드라이브에 있다면 C드라이브에 upload 폴더를 생성해 놓아야 한다.
@@ -29,7 +32,7 @@ public class FileUploadService {
 	private static String PREFIX_URL = "/upload/";
 
 
-	public String restore(MultipartFile multipartFile,String name) {
+	public String restore(MultipartFile multipartFile,String name,String number) {
 
 
 
@@ -46,7 +49,7 @@ public class FileUploadService {
 
 
 			// 서버에서 저장 할 파일 이름
-			String saveFileName = name+genSaveFileName(extName);
+			String saveFileName = name+"_"+number+"_"+genSaveFileName(extName);
 
 			writeFile(multipartFile, saveFileName);
 
@@ -64,7 +67,9 @@ public class FileUploadService {
 	// 현재 시간을 기준으로 파일 이름 생성
 	private String genSaveFileName(String extName) {
 		String fileName = "";
-
+		
+		
+		
 		fileName += i;
 		fileName += extName;
 		i++;

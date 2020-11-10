@@ -1,10 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
+<%@ page import="com.study.springboot.dto.BoardDto" %>
+<%@ page import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Document</title>
+<title>글쓰기</title>
+	<%
+	ArrayList<BoardDto> list = (ArrayList<BoardDto>)session.getAttribute("list");
+	%>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
 	integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
@@ -42,23 +48,27 @@
 					<img src="images/logo_write.png" alt="x" class="image" >
 				</div>
 				<br />
-
+				
 				<div class="text">
+				
 					<hr class="hr" />
 					사진업로드
 					<hr class="hr" />
 				</div>
+				
 			<form action="/uploadAction" method="post"
 				enctype="multipart/form-data">
 				<table class="table">
 					<tr>
-						<td><input id="input_img" type="file" name="filename" multiple="multiple" ></td>
+					<td>
+					<input id="input_img" type="file" name="filename" accept="image/*" onchange="setThumbnail(event);" multiple="multiple" ></td>
+					<c:forEach var="dto" items="${list}" >
+					<input id="number" name="number" type="hidden"	value="${dto.bno+1}" />						
+					</c:forEach>
 					</tr>
 					<tr>
 						<td>
-							<div class="img_wrap">
-								<img id="img" />
-							</div>
+							<div class="img_wrap" id="image_container"></div>
 						</td>
 					</tr>
 					<tr>
@@ -78,6 +88,22 @@
 
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script>
+  function setThumbnail(event) { 
+	  for (var image of event.target.files) { 
+		  var reader = new FileReader(); 
+		  
+		  reader.onload = function(event) { 
+			  var img = document.createElement("img"); 
+		  img.setAttribute("src", event.target.result);
+		   document.querySelector("div#image_container").appendChild(img);
+		    };
+		    
+		    console.log(image);
+		    reader.readAsDataURL(image);
+		  }
+      }
+
+  
     var sel_file;
     $(document).ready(function() {
       $('#input_img').on("change", handleImgFileSelect);

@@ -31,9 +31,19 @@
 	<update id="updateMemberDao" parameterType="com.study.springboot.dto.MemberDto" >
         update blog_member set password = #{password}, name = #{name}, gender = #{gender}, mail =  #{mail}, phone =  #{phone}, bio = #{bio}  where id = #{id}
    	</update>
+   	
 	<delete id="deleteMemberDao">
 		delete from blog_member where id = #{id} and password = #{pw} 
 	</delete>
+	
+	<select id="idCheckDao" resultType="_int"> 
+		select count(*) from blog_member where id = #{id}
+	</select>
+	
+	<select id="mailCheckDao" resultType="_int"> 
+		select count(*) from blog_member where mail = #{mail, jdbcType=VARCHAR}
+	</select>
+	
 	<!-- <delete id="deleteMemberDao">
 		delete from blog_board where bname = #{id}
 	</delete> -->
@@ -43,9 +53,7 @@
 			
 	#{param1}을 #{id}로 사용하려면 Mapper Class에서 
 	@Param("id") String id; 로 지정해야됨.
-	<select id="idCheckDao" resultType="_int"> 
-		select count(*) from blog_member where id = #{id}
-	</select>
+	
 	
 	
 	

@@ -1,5 +1,7 @@
 package com.study.springboot;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -9,9 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.study.springboot.dto.BoardDto;
 import com.study.springboot.dto.MemberDto;
 import com.study.springboot.service.FileUploadService;
 import com.study.springboot.service.IBoardService;
@@ -44,6 +48,9 @@ public class MyController {
 	
 	@RequestMapping("/main")
 	public String main(HttpServletRequest req, Model model) throws Exception {
+		
+		ArrayList<BoardDto> list = board_service.list();
+		req.getSession().setAttribute("list", list);
 		
 		return "main";
 	}
@@ -147,6 +154,42 @@ public class MyController {
 		}
 	
 	}
+	@RequestMapping(value="/IdCheckAction", method=RequestMethod.GET)
+	public @ResponseBody String IdCheckAction(HttpServletRequest req, Model model) {
+		
+		System.out.println( "userID:" + req.getParameter("id"));
+		
+		
+		int nResult = member_service.idCheck( req.getParameter("id") );
+		if( nResult > 0 ) {
+			System.out.println("중복된 아이디 있음");
+			
+		}else {
+			System.out.println("중복된 아이디 없음");
+			
+		}
+		
+		return String.valueOf( nResult );
+	}
+	
+	@RequestMapping(value="/MailCheckAction", method=RequestMethod.GET)
+	public @ResponseBody String MailCheckAction(HttpServletRequest req, Model model) {
+		
+		System.out.println( "userMail:" + req.getParameter("mail"));
+		
+		
+		int nResult = member_service.idCheck( req.getParameter("mail") );
+		if( nResult > 0 ) {
+			System.out.println("중복된 메일 있음");
+			
+		}else {
+			System.out.println("중복된 메일 없음");
+			
+		}
+		
+		return String.valueOf( nResult );
+	}
+	
 	@RequestMapping(value = "/uploadAction", method = RequestMethod.POST, produces = "text/html; charset=UTF-8")
 	public  String uploadOk(
 			HttpServletRequest req,
@@ -155,10 +198,12 @@ public class MyController {
 			@RequestParam("filename") MultipartFile[] file) throws Exception{
 		
 		HttpSession session = req.getSession();
+		String number = req.getParameter("number");
 		for(int i=0;i<file.length;i++) {
-			String url = fileUploadService.restore(file[i],(String)session.getAttribute("sessionID"));
+			String url = fileUploadService.restore(file[i],(String)session.getAttribute("sessionID"),number);
 		}
-		
+		ArrayList<BoardDto> list = board_service.list();
+		req.getSession().setAttribute("list", list);
 		req.setCharacterEncoding("utf-8");
 		
 		String bname = (String)session.getAttribute("sessionID");
@@ -266,7 +311,11 @@ public class MyController {
 	}
 	
 	@RequestMapping("/write")
-	public String write() throws Exception {
+	public String write(HttpServletRequest req, Model model) throws Exception {
+		ArrayList<BoardDto> list = board_service.list();
+		req.getSession().setAttribute("list",list);
+		
+		
 		return "write";
 	}
 	
