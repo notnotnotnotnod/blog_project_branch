@@ -2,10 +2,13 @@ package com.study.springboot.dao;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.study.springboot.dto.BoardDto;
+import com.study.springboot.dto.MemberDto;
 import com.study.springboot.dto.ReplyDto;
 
 @Mapper
@@ -15,4 +18,9 @@ public interface IReplyDao {
     public int reply(String rname, String rcontent); //댓글작성
     
     public ArrayList<ReplyDto> rlist(); //글목록
+    
+    public int updateReplyDao(ReplyDto reply);
+    
+    public int deleteReplyDao(ReplyDto reply);
+    
 }
