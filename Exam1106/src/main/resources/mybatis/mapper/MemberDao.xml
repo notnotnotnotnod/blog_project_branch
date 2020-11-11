@@ -11,7 +11,14 @@
            values (#{id}, #{password}, #{name}, #{mail})
    </insert>
    
+	<insert id="picset" parameterType="com.study.springboot.dto.FileDto">
+		insert into pic_board (bno,filename)
+			values (#{bno}, #{filename})
+	</insert>
 	
+	<select id="fileListDao" resultType="com.study.springboot.dto.FileDto">
+		select * from pic_board order by bno desc
+	</select>
 	
 	<select id="loginCheckDao" resultType="_int">
 		select count(*) from blog_member where id = #{id} and password = #{pw}

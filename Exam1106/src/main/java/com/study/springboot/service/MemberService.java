@@ -14,6 +14,7 @@ import org.springframework.transaction.TransactionStatus;
 import com.study.springboot.dao.IBoardDao;
 import com.study.springboot.dao.IMemberDao;
 import com.study.springboot.dao.IReplyDao;
+import com.study.springboot.dto.FileDto;
 import com.study.springboot.dto.MemberDto;
 
 //@Service, @Controller, @Repository가 동일한 기능을 한다.
@@ -62,6 +63,13 @@ public class MemberService implements IMemberService {
 		return memberDao.getUserInfoDao(id);
 	}
 
+		@Override
+		public int picset(int bno,String filename) {
+			int nResult = memberDao.picset(bno, filename);
+			return nResult;
+		}
+		
+		
 	@Override
 	public int updateMember(HttpServletRequest req) { // 세션이 가지고있는 로그인한ID 정보를 가져온다
 		HttpSession session = req.getSession();
@@ -100,6 +108,18 @@ public class MemberService implements IMemberService {
 	public String FindPw(String id, String name, String mail) {
 		String nResult = memberDao.FindPwDao(id, name, mail);
 		return nResult;
+	}
+	
+	@Override
+	public int getBno2(String id) {
+		boardDao.bnodelete("get");
+		return 1;
+	}
+	
+	@Override
+	public int getBno(String id) {
+			boardDao.write(id, "get");
+			return 1;		
 	}
 	@Override
 	public int deleteMember(String id, String pw) {
@@ -147,6 +167,12 @@ public class MemberService implements IMemberService {
 	public int logoutDao() { 
 		return 1; //항상 성공 
 		}
+	
+	@Override
+	public ArrayList<FileDto> fileList(){
+		ArrayList<FileDto> list = memberDao.fileListDao();
+		return list;
+	}
 	
 	/*
 	 * @Override public MemberDto getUserInfo(String id) { return

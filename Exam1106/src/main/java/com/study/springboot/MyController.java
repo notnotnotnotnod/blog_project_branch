@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.study.springboot.dto.BoardDto;
+import com.study.springboot.dto.FileDto;
 import com.study.springboot.dto.MemberDto;
 import com.study.springboot.dto.ReplyDto;
 import com.study.springboot.service.FileUploadService;
@@ -54,9 +55,10 @@ public class MyController {
 	
 	@RequestMapping("/main")
 	public String main(HttpServletRequest req, Model model) throws Exception {
+		String id = req.getParameter("id");
+		int i =member_service.getBno2(id);
 		
-		ArrayList<BoardDto> list = board_service.list();
-		req.getSession().setAttribute("list", list);
+		  if(i==1) { System.out.println("getBno2성공!"); }
 		
 		return "main";
 	}
@@ -119,7 +121,14 @@ public class MyController {
 			//로그인 성공 -> 세션에 아이디를 저장
 			HttpSession session = req.getSession();
 	   		session.setAttribute("sessionID", id);
-			
+            member_service.getBno(id);
+	   		//member_service.getBno2(id);
+            ArrayList<FileDto> filelist = member_service.fileList();
+    		ArrayList<BoardDto> list = board_service.list();
+    		
+    		req.getSession().setAttribute("filelist", filelist);
+    		req.getSession().setAttribute("list", list);
+	   		
 			model.addAttribute("msg","로그인 성공");
             model.addAttribute("url","/main");
 
@@ -218,7 +227,7 @@ public class MyController {
 		
 		return String.valueOf( nResult );
 	}
-	
+	 
 	@RequestMapping(value = "/uploadAction", method = RequestMethod.POST, produces = "text/html; charset=UTF-8")
 	public  String uploadOk(
 			HttpServletRequest req,
@@ -227,23 +236,39 @@ public class MyController {
 			@RequestParam("filename") MultipartFile[] file) throws Exception{
 		
 		HttpSession session = req.getSession();
-		String number = req.getParameter("number");
+		String numberset = req.getParameter("number");
+		int number = Integer.parseInt(numberset);
+		ArrayList<BoardDto> list = board_service.list();
+		ArrayList<FileDto> filelist = member_service.fileList();
+		
+		ArrayList fileset = new ArrayList();
+	 
+	 
 		for(int i=0;i<file.length;i++) {
-			String url = fileUploadService.restore(file[i],(String)session.getAttribute("sessionID"),number);
+			String url = fileUploadService.restore(file[i],(String)session.getAttribute("sessionID"),numberset);
 			
 			//파일이름 불러오기 arraylist에 저장가능.
 			String name = fileUploadService.getname();
-			System.out.println("파일 "+(i+1)+"번째 이름 : "+name);
-			
+			fileset.add(name);
 		}
-		ArrayList<BoardDto> list = board_service.list();
+		for(int i=0;i<fileset.size();i++) {
+			System.out.println("파일이름 : "+fileset.get(i));
+			int result = member_service.picset(number, (String)fileset.get(i));
+		}
+		
+		
 		req.getSession().setAttribute("list", list);
+		req.getSession().setAttribute("filelist", filelist);
+		
+		
 		req.setCharacterEncoding("utf-8");
 		
 		String bname = (String)session.getAttribute("sessionID");
 		String bcontent = req.getParameter("bcontent");
+		
 		System.out.println(bname);
 		System.out.println(session.getAttribute("sessionID"));
+		
 		int nResult = board_service.write(bname, bcontent);
 		if( nResult <= 0 ) {
 			System.out.println("글쓰기 실패");

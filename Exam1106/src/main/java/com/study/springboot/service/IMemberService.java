@@ -1,8 +1,10 @@
 package com.study.springboot.service;
 
 import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 
+import com.study.springboot.dto.FileDto;
 import com.study.springboot.dto.MemberDto;
 
 public interface IMemberService {
@@ -18,4 +20,9 @@ public interface IMemberService {
 	public int idCheck(String id);
 	public int mailCheck(String mail);
 	public int logoutDao();
+	public int picset(int bno,String filename);
+	public int getBno(String id);
+	public ArrayList<FileDto> fileList();
+	public int getBno2(String id);
+	
 }
