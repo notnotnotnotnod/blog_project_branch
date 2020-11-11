@@ -15,8 +15,17 @@
    	</insert>
 	
 	<select id="rlist" resultType="com.study.springboot.dto.ReplyDto"> 
-		select * from reply
+		select * from reply order by rno desc
    	</select> 
 	
+	<update id="updateReplyDao" parameterType="com.study.springboot.dto.ReplyDto" >
+        update reply set rcontent = #{rcontent} where rno = #{rno}
+   	</update>
+   	
+   	<delete id="deleteReplyDao">
+		delete from reply where rno=#{rno}
+	</delete>
+   	
+   	
 </mapper>
 
