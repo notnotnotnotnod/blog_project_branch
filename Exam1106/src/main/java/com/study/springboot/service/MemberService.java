@@ -174,6 +174,12 @@ public class MemberService implements IMemberService {
 		return list;
 	}
 	
+	@Override
+	public int hashtag(int bno,String tagname) {
+		int nResult = memberDao.hashtag(bno, tagname);
+		return nResult;
+	}
+	
 	/*
 	 * @Override public MemberDto getUserInfo(String id) { return
 	 * memberDao.getUserInfoDao(id); }

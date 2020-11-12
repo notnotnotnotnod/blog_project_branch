@@ -16,8 +16,7 @@ public class MemberDto
 	private String mail;		// 이메일
 	private String phone;		// 전화
 	private String bio;		    // 자기소개
-	private String bno;
-	private String filename;
+	
 	//기본생성자함수
 //	public SimpleBbsDto() {
 //		

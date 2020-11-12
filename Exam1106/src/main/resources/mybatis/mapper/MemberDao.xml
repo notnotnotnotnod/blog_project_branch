@@ -16,6 +16,11 @@
 			values (#{bno}, #{filename})
 	</insert>
 	
+	<insert id="hashtag" parameterType="com.study.springboot.dto.FileDto">
+		insert into hashtag_board (bno,tagname)
+			values (#{bno}, #{tagname})
+	</insert>
+	
 	<select id="fileListDao" resultType="com.study.springboot.dto.FileDto">
 		select * from pic_board order by bno desc
 	</select>

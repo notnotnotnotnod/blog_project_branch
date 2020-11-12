@@ -72,7 +72,7 @@
         }
 
         header {
-            margin: 10px 100px;
+            margin: 10px;
             width: 50%;
         }
     </style>
@@ -109,7 +109,7 @@
             <div>
                 <header class="photo__header">
                     <img src="http://placehold.it/150x150" alt="프로필사진">
-                    <span class="photo__username">닉네임</span>
+                    <span class="photo__username" style="font-size: 20px;"><%out.print(board.get(i).getBname()); %></span>
                 </header>
             </div>
             <div>
@@ -133,11 +133,7 @@
                         <%sum++;
                         System.out.println("sum : "+sum);
                         }}} %> 
-                       
-                        <!-- 
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="http://placehold.it/200x200" alt="Third slide">
-                        </div> -->
+                      
 
 
                         <!-- / 슬라이드 쇼 끝 -->
@@ -165,11 +161,13 @@
                         </ul> <!-- 인디케이터 끝 -->
                     </div>
 
-                    <div>
-                        <a href="#"><span>해쉬태그</span></a>
-                            <a href="#"><span>댓글 더보기</span></a>
+                    <ul class="photo__comments">
+                        <!-- 메인 글 내용 -->
+                    	<li class="photo__comment"><span style="font-size: 20px;"><%out.print(board.get(i).getBcontent()); %></span>
+                        <li class="photo__comment"><a href="#"><span>해쉬태그</span></a></li>
+                         <li class="photo__comment"><a href="#"><span>댓글 더보기</span></a></li>
                         <hr>
-                    </div>
+                    </ul>
                     <ul class="photo__comments">
                         <li class="photo__comment">
                             <span class="photo__comment-author">댓글작성자닉네임</span> 이뻐요!
@@ -178,7 +176,8 @@
                             <span class="photo__comment-author">댓글작성자닉네임</span> 이뻐요!
                         </li>
                     </ul>
-                    <span class="photo__date">몇 시간 전 작성</span>
+                    <span class="photo__date"><%out.print(board.get(i).getBdate()); %></span>
+                    <hr>
                     <div class="photo__add-comment-container">
                         <textarea placeholder="댓글을 작성하세요.."></textarea>
                         <i class="fa fa-ellipsis-h"></i>

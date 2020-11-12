@@ -24,5 +24,6 @@ public interface IMemberService {
 	public int getBno(String id);
 	public ArrayList<FileDto> fileList();
 	public int getBno2(String id);
+	public int hashtag(int bno, String tagname);
 	
 }

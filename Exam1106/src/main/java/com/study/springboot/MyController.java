@@ -55,10 +55,7 @@ public class MyController {
 	
 	@RequestMapping("/main")
 	public String main(HttpServletRequest req, Model model) throws Exception {
-		String id = req.getParameter("id");
-		int i =member_service.getBno2(id);
 		
-		  if(i==1) { System.out.println("getBno2성공!"); }
 		
 		return "main";
 	}
@@ -121,8 +118,7 @@ public class MyController {
 			//로그인 성공 -> 세션에 아이디를 저장
 			HttpSession session = req.getSession();
 	   		session.setAttribute("sessionID", id);
-            member_service.getBno(id);
-	   		//member_service.getBno2(id);
+            
             ArrayList<FileDto> filelist = member_service.fileList();
     		ArrayList<BoardDto> list = board_service.list();
     		
@@ -236,14 +232,46 @@ public class MyController {
 			@RequestParam("filename") MultipartFile[] file) throws Exception{
 		
 		HttpSession session = req.getSession();
+		
+		/*
+		 * String id = (String)session.getAttribute("sessionID");
+		 * member_service.getBno(id);
+		 */
 		String numberset = req.getParameter("number");
 		int number = Integer.parseInt(numberset);
 		ArrayList<BoardDto> list = board_service.list();
 		ArrayList<FileDto> filelist = member_service.fileList();
 		
 		ArrayList fileset = new ArrayList();
-	 
-	 
+		//해시태그란에 들어있던 해시태그를 ,기준으로 받아서 #OOO으로 ArrayList에 삽입.
+		ArrayList hashtagList = new ArrayList();
+		String hashtag = req.getParameter("tags");
+		int j=0;
+		for(int i=0;i<hashtag.length();i++) {
+			String get="#";
+			if(hashtag.charAt(i)==',') {
+				for(int k=j;k<i;k++) {
+					get+=hashtag.charAt(k);
+				}
+				hashtagList.add(get);
+				j=i+1;
+			}
+			if(i==(hashtag.length()-1)) {
+				if(hashtag.charAt(i)==',') {
+			}else {
+				for(int k=j;k<=i;k++) {
+					get+=hashtag.charAt(k);
+				}
+				hashtagList.add(get);
+			}
+			}
+		}		
+		
+		for(int i=0;i<hashtagList.size();i++) {
+			member_service.hashtag(number,(String)hashtagList.get(i));
+		}
+		
+			 
 		for(int i=0;i<file.length;i++) {
 			String url = fileUploadService.restore(file[i],(String)session.getAttribute("sessionID"),numberset);
 			
@@ -277,7 +305,11 @@ public class MyController {
 	        model.addAttribute("url","/write");
 		}else {
 			System.out.println("글쓰기 성공");
-			
+			/*
+			 * int i =member_service.getBno2(id);
+			 * 
+			 * if(i==1) { System.out.println("getBno2성공!"); }
+			 */
 			model.addAttribute("msg","글쓰기 성공");
             model.addAttribute("url","/main");
 		}

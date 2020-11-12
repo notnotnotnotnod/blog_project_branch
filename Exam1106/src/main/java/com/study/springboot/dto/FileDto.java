@@ -11,4 +11,5 @@ import lombok.Data;
 public class FileDto {
 	private int bno;
 	private String filename;
+	private String tagname;
 }

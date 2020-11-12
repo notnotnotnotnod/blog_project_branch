@@ -76,7 +76,7 @@
 							글 내용" cols="30" rows="10" style="width: 268.02px;"></textarea></td>
 					</tr>
 					<tr>
-						<td><input type="text" name="tags" placeholder="#태그" style="height: 70px;"></td>
+						<td><input type="text" name="tags" placeholder="해쉬태그 (각 태그 사이에 ','로 작성)" style="height: 70px;"></td>
 					</tr>
 				</table>
 				<input type="submit" value="업로드">
