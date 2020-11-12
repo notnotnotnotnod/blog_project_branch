@@ -17,6 +17,10 @@
 	<select id="rlist" resultType="com.study.springboot.dto.ReplyDto"> 
 		select * from reply
    	</select> 
+   	
+   	<delete id="delete">
+		delete from reply where rname=#{param1}
+	</delete>
 	
 </mapper>
 
