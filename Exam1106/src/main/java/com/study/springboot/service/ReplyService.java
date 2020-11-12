@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.study.springboot.dao.IReplyDao;
-
 import com.study.springboot.dto.ReplyDto;
 
 @Service
@@ -63,18 +62,9 @@ public class ReplyService implements IReplyService{
 		return nResult;
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public int delete(String rname) {
+		
+		return replyDao.delete(rname);
+	}
 }
+

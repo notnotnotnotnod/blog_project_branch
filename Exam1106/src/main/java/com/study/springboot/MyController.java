@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.study.springboot.dto.BoardDto;
+import com.study.springboot.dto.FileDto;
 import com.study.springboot.dto.MemberDto;
 import com.study.springboot.dto.ReplyDto;
 import com.study.springboot.service.FileUploadService;
@@ -31,8 +32,7 @@ import com.study.springboot.service.IReplyService;
 public class MyController {
 	
 	@Autowired
-	IMemberService member_service;
-	
+	IMemberService member_service;	
 	
 	@Autowired
 	IBoardService board_service;
@@ -56,8 +56,6 @@ public class MyController {
 	@RequestMapping("/main")
 	public String main(HttpServletRequest req, Model model) throws Exception {
 		
-		ArrayList<BoardDto> list = board_service.list();
-		req.getSession().setAttribute("list", list);
 		
 		return "main";
 	}
@@ -91,15 +89,15 @@ public class MyController {
 			System.out.println("회원가입 실패");
 			
 	        model.addAttribute("msg","회원가입 실패");
-	        model.addAttribute("url","/");
+	        model.addAttribute("url","/join");
 		}else {
 			System.out.println("회원가입 성공");
 			
 			model.addAttribute("msg","회원가입 성공");
-            model.addAttribute("url","/");
+            model.addAttribute("url","/login");
 		}
 		
-		return "login";
+		return "redirect";
 	}
 	
 	@RequestMapping("/MemberLoginAction")
@@ -113,20 +111,49 @@ public class MyController {
 			
 	        model.addAttribute("msg","로그인 실패 - 아이디나 암호를 확인해주세요");
 	        model.addAttribute("url","/login");
-	        return "login";
+
 		}else {
 			System.out.println("로그인 성공");
 			
 			//로그인 성공 -> 세션에 아이디를 저장
 			HttpSession session = req.getSession();
 	   		session.setAttribute("sessionID", id);
-			
+            
+            ArrayList<FileDto> filelist = member_service.fileList();
+    		ArrayList<BoardDto> list = board_service.list();
+    		
+    		req.getSession().setAttribute("filelist", filelist);
+    		req.getSession().setAttribute("list", list);
+	   		
 			model.addAttribute("msg","로그인 성공");
             model.addAttribute("url","/main");
-            return "main";
+
 		}
+		return "redirect";
 		 //redirect.jsp
 		}
+	
+	@RequestMapping("/LogoutAction")
+	public String MemberLogoutAction(HttpServletRequest req, Model model) {
+		int nResult = member_service.logoutDao();
+		if( nResult <= 0 ) {
+			System.out.println("로그아웃 실패");
+			
+	        model.addAttribute("msg","로그아웃 실패");
+	        model.addAttribute("url","/");
+		}else {
+			System.out.println("로그아웃 성공");
+			
+			// 로그아웃시 세션정보를 모두 삭제한다.
+			req.getSession().invalidate();
+			
+			model.addAttribute("msg","로그아웃 성공");
+            model.addAttribute("url","/login");
+		}
+		
+		return "redirect"; //redirect.jsp
+	}
+	
 		@RequestMapping("/mypage")
 	public String mypage(HttpServletRequest req) {
 		String id = req.getSession().getAttribute("sessionID").toString();
@@ -150,16 +177,16 @@ public class MyController {
 			System.out.println("회원수정 실패");
 			
 			model.addAttribute("msg","회원수정 실패");
-			model.addAttribute("url","/ModifyFrom");
-			return "mypage";
+			model.addAttribute("url","/mypage");
+
 		}else {
 			System.out.println("회원수정 성공");
 			
 			model.addAttribute("msg","회원수정 성공");
-			model.addAttribute("url","/UserInfoForm");
-			return "main";
+			model.addAttribute("url","/main");
+
 		}
-	
+	return "redirect";
 	}
 	@RequestMapping(value="/IdCheckAction", method=RequestMethod.GET)
 	public @ResponseBody String IdCheckAction(HttpServletRequest req, Model model) {
@@ -196,7 +223,7 @@ public class MyController {
 		
 		return String.valueOf( nResult );
 	}
-	
+	 
 	@RequestMapping(value = "/uploadAction", method = RequestMethod.POST, produces = "text/html; charset=UTF-8")
 	public  String uploadOk(
 			HttpServletRequest req,
@@ -205,38 +232,90 @@ public class MyController {
 			@RequestParam("filename") MultipartFile[] file) throws Exception{
 		
 		HttpSession session = req.getSession();
-		String number = req.getParameter("number");
+		
+		/*
+		 * String id = (String)session.getAttribute("sessionID");
+		 * member_service.getBno(id);
+		 */
+		String numberset = req.getParameter("number");
+		int number = Integer.parseInt(numberset);
+		ArrayList<BoardDto> list = board_service.list();
+		ArrayList<FileDto> filelist = member_service.fileList();
+		
+		ArrayList fileset = new ArrayList();
+		//해시태그란에 들어있던 해시태그를 ,기준으로 받아서 #OOO으로 ArrayList에 삽입.
+		ArrayList hashtagList = new ArrayList();
+		String hashtag = req.getParameter("tags");
+		int j=0;
+		for(int i=0;i<hashtag.length();i++) {
+			String get="#";
+			if(hashtag.charAt(i)==',') {
+				for(int k=j;k<i;k++) {
+					get+=hashtag.charAt(k);
+				}
+				hashtagList.add(get);
+				j=i+1;
+			}
+			if(i==(hashtag.length()-1)) {
+				if(hashtag.charAt(i)==',') {
+			}else {
+				for(int k=j;k<=i;k++) {
+					get+=hashtag.charAt(k);
+				}
+				hashtagList.add(get);
+			}
+			}
+		}		
+		
+		for(int i=0;i<hashtagList.size();i++) {
+			member_service.hashtag(number,(String)hashtagList.get(i));
+		}
+		
+			 
 		for(int i=0;i<file.length;i++) {
-			String url = fileUploadService.restore(file[i],(String)session.getAttribute("sessionID"),number);
+			String url = fileUploadService.restore(file[i],(String)session.getAttribute("sessionID"),numberset);
 			
 			//파일이름 불러오기 arraylist에 저장가능.
 			String name = fileUploadService.getname();
-			System.out.println("파일 "+(i+1)+"번째 이름 : "+name);
-			
+			fileset.add(name);
 		}
-		ArrayList<BoardDto> list = board_service.list();
+		for(int i=0;i<fileset.size();i++) {
+			System.out.println("파일이름 : "+fileset.get(i));
+			int result = member_service.picset(number, (String)fileset.get(i));
+		}
+		
+		
 		req.getSession().setAttribute("list", list);
+		req.getSession().setAttribute("filelist", filelist);
+		
+		
 		req.setCharacterEncoding("utf-8");
 		
 		String bname = (String)session.getAttribute("sessionID");
 		String bcontent = req.getParameter("bcontent");
+		
 		System.out.println(bname);
 		System.out.println(session.getAttribute("sessionID"));
+		
 		int nResult = board_service.write(bname, bcontent);
 		if( nResult <= 0 ) {
 			System.out.println("글쓰기 실패");
 			
 	        model.addAttribute("msg","글쓰기 실패");
-	        model.addAttribute("url","/");
+	        model.addAttribute("url","/write");
 		}else {
 			System.out.println("글쓰기 성공");
-			
+			/*
+			 * int i =member_service.getBno2(id);
+			 * 
+			 * if(i==1) { System.out.println("getBno2성공!"); }
+			 */
 			model.addAttribute("msg","글쓰기 성공");
-            model.addAttribute("url","/");
+            model.addAttribute("url","/main");
 		}
 		
 		
-		return "main";
+		return "redirect";
 	}
 
 
@@ -316,16 +395,18 @@ public class MyController {
 			System.out.println("회원탈퇴 실패");
 			
 			model.addAttribute("msg","회원탈퇴 실패");
-			model.addAttribute("url","/ModifyFrom");
+			model.addAttribute("url","/dropout");
+
 		}else {
 			System.out.println("회원탈퇴 성공");
 			
 			session.invalidate(); // 회원정보 담긴 세션 삭제 - 로그아웃함.
 			
 			model.addAttribute("msg","회원탈퇴 성공");
-			model.addAttribute("url","/");
+			model.addAttribute("url","/login");
+
 		}
-		return "dropout";
+		return "redirect";
 	}
 	
 	@RequestMapping("/write")

@@ -17,6 +17,10 @@
 	<select id="rlist" resultType="com.study.springboot.dto.ReplyDto"> 
 		select * from reply order by rno desc
    	</select> 
+   	
+   	<delete id="delete">
+		delete from reply where rname=#{param1}
+	</delete>
 	
 	<update id="updateReplyDao" parameterType="com.study.springboot.dto.ReplyDto" >
         update reply set rcontent = #{rcontent} where rno = #{rno}

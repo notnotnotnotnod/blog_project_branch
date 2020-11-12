@@ -60,6 +60,7 @@
         </div>
         <!-- master comments -->
         <h1 class="edit-profile__username"><%=member.getName() %>
+        <a class="btn btn-primary" href="LogoutAction" role="button" style="float: right;">로그아웃</a>
           <form action="dropout">
           <input type="submit" value="회원탈퇴" style="float: right;">
         </form>

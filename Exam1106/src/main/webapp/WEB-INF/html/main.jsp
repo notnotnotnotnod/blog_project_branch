@@ -1,5 +1,16 @@
+<%@page import="ch.qos.logback.core.net.SyslogOutputStream"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+    <%@ page import="java.util.ArrayList"%>
+    <%@ page import="com.study.springboot.MyController" %>
+    <%@ page import="com.study.springboot.dao.IBoardDao" %>    
+	<%@ page import="com.study.springboot.dto.BoardDto" %>
+    <%@ page import="com.study.springboot.dto.FileDto" %>
+<%--     <%@ page import="com.study.springboot.dto.IMemberDao" %> --%>
+    <% ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist"); 
+   	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");  	   
+    %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,7 +72,7 @@
         }
 
         header {
-            margin: 10px 100px;
+            margin: 10px;
             width: 50%;
         }
     </style>
@@ -89,31 +100,40 @@
           </nav>
     </header>
     <main id="feed">
+    <% for(int i=0;i<board.size();i++) {
+    	int sum=0;
+    	int gap=0;
+   		
+    %>
         <div id="section">
             <div>
                 <header class="photo__header">
                     <img src="http://placehold.it/150x150" alt="프로필사진">
-                    <span class="photo__username">닉네임</span>
+                    <span class="photo__username" style="font-size: 20px;"><%out.print(board.get(i).getBname()); %></span>
                 </header>
             </div>
             <div>
                 <div id="demo" class="carousel slide container align-center" data-ride="carousel">
                     <div class="carousel-inner">
                         <!-- 슬라이드 쇼 -->
+                       <%for(int k=0;k<fileset.size();k++){
+                      		if(board.get(i).getBno()==fileset.get(k).getBno()){System.out.println(fileset.get(k).getFilename());
+                      			if(gap==0){%>                    		
                         <div class="carousel-item active">
-                            <!--가로-->
-                            <img class="d-block w-100" src="http://placehold.it/200x200" alt="First slide">
-                            <div class="carousel-caption d-none d-md-block">
-                                <h5></h5>
-                                <p></p>
-                            </div>
+                            <img class="d-block w-100" src="upload/<%out.print(fileset.get(k).getFilename());%>" alt="First slide">
                         </div>
+                        <% gap++;
+                        sum++;
+                        System.out.println("sum : "+sum);
+                        
+                        }else{ %>
                         <div class="carousel-item">
-                            <img class="d-block w-100" src="http://placehold.it/200x200" alt="Second slide">
+                            <img class="d-block w-100" src="upload/<%out.print(fileset.get(k).getFilename());%>" alt="next slide">
                         </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="http://placehold.it/200x200" alt="Third slide">
-                        </div>
+                        <%sum++;
+                        System.out.println("sum : "+sum);
+                        }}} %> 
+                      
 
 
                         <!-- / 슬라이드 쇼 끝 -->
@@ -128,19 +148,26 @@
                         </a> <!-- / 화살표 버튼 끝 -->
                         <!-- 인디케이터 -->
                         <ul class="carousel-indicators">
-                            <li data-target="#demo" data-slide-to="0" class="active"></li>
+                        <li data-target="#demo" data-slide-to="0" class="active"></li>
+                        <% if(sum>=2){
+                        	for(int j=1;j<sum;j++){%>
+                        		<li data-target="#demo" data-slide-to="<%out.print(j);%>"></li>
+                        	<%}
+                        } %>
                             <!--0번부터시작-->
-                            <li data-target="#demo" data-slide-to="1"></li>
-                            <li data-target="#demo" data-slide-to="2"></li>
+                            <!-- <li data-target="#demo" data-slide-to="1"></li>
+                            <li data-target="#demo" data-slide-to="2"></li> -->
                             <!-- <li data-target="#demo" data-slide-to="3"></li> -->
                         </ul> <!-- 인디케이터 끝 -->
                     </div>
 
-                    <div>
-                        <a href="#"><span>해쉬태그</span></a>
-                        <a href="coment?bno=2"><span>댓글 더보기</span></a>
+                    <ul class="photo__comments">
+                        <!-- 메인 글 내용 -->
+                    	<li class="photo__comment"><span style="font-size: 20px;"><%out.print(board.get(i).getBcontent()); %></span>
+                        <li class="photo__comment"><a href="#"><span>해쉬태그</span></a></li>
+                         <li class="photo__comment"><a href="#"><span>댓글 더보기</span></a></li>
                         <hr>
-                    </div>
+                    </ul>
                     <ul class="photo__comments">
                         <li class="photo__comment">
                             <span class="photo__comment-author">댓글작성자닉네임</span> 이뻐요!
@@ -149,76 +176,8 @@
                             <span class="photo__comment-author">댓글작성자닉네임</span> 이뻐요!
                         </li>
                     </ul>
-                    <span class="photo__date">몇 시간 전 작성</span>
+                    <span class="photo__date"><%out.print(board.get(i).getBdate()); %></span>
                     <hr>
-                    <div class="photo__add-comment-container">
-                        <textarea placeholder="댓글을 작성하세요.."></textarea>
-				<a href="#"><span>go</span></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="section">
-            <div>
-                <header class="photo__header">
-                    <img src="http://placehold.it/150x150" alt="프로필사진">
-                    <span class="photo__username">닉네임</span>
-                </header>
-            </div>
-            <div>
-                <div id="demo" class="carousel slide container align-center" data-ride="carousel">
-                    <div class="carousel-inner">
-                        <!-- 슬라이드 쇼 -->
-                        <div class="carousel-item active">
-                            <!--가로-->
-                            <img class="d-block w-100" src="http://placehold.it/200x200" alt="First slide">
-                            <div class="carousel-caption d-none d-md-block">
-                                <h5></h5>
-                                <p></p>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="http://placehold.it/200x200" alt="Second slide">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="http://placehold.it/200x200" alt="Third slide">
-                        </div>
-
-
-                        <!-- / 슬라이드 쇼 끝 -->
-                        <!-- 왼쪽 오른쪽 화살표 버튼 -->
-                        <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <!-- <span>Previous</span> -->
-                        </a>
-                        <a class="carousel-control-next" href="#demo" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <!-- <span>Next</span> -->
-                        </a> <!-- / 화살표 버튼 끝 -->
-                        <!-- 인디케이터 -->
-                        <ul class="carousel-indicators">
-                            <li data-target="#demo" data-slide-to="0" class="active"></li>
-                            <!--0번부터시작-->
-                            <li data-target="#demo" data-slide-to="1"></li>
-                            <li data-target="#demo" data-slide-to="2"></li>
-                            <!-- <li data-target="#demo" data-slide-to="3"></li> -->
-                        </ul> <!-- 인디케이터 끝 -->
-                    </div>
-
-                    <div>
-                        <a href="#"><span>해쉬태그</span></a>
-                            <a href="#"><span>댓글 더보기</span></a>
-                        <hr>
-                    </div>
-                    <ul class="photo__comments">
-                        <li class="photo__comment">
-                            <span class="photo__comment-author">댓글작성자닉네임</span> 이뻐요!
-                        </li>
-                        <li class="photo__comment">
-                            <span class="photo__comment-author">댓글작성자닉네임</span> 이뻐요!
-                        </li>
-                    </ul>
-                    <span class="photo__date">몇 시간 전 작성</span>
                     <div class="photo__add-comment-container">
                         <textarea placeholder="댓글을 작성하세요.."></textarea>
                         <i class="fa fa-ellipsis-h"></i>
@@ -226,6 +185,7 @@
                 </div>
             </div>
         </div>
+        <% } %>
             
                 <!-- class="COOzN MnWb5 YT6rB " -->
                 <aside id="aside">
@@ -233,6 +193,7 @@
                     <img src="http://placehold.it/150x150" alt="프로필사진">
                     <span class="photo__username aside" name = "id"><%= session.getAttribute("sessionID") %></span>
                     <a class="btn btn-primary" href="write" role="button" style="float: right;">글쓰기</a>
+                    <a class="btn btn-primary" href="LogoutAction" role="button" style="float: right;">로그아웃</a>
                     </div>
                     <br>
                     <div style="border: 1px solid black; height: 5cm;">
