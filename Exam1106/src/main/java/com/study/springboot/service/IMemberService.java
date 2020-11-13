@@ -21,9 +21,9 @@ public interface IMemberService {
 	public int mailCheck(String mail);
 	public int logoutDao();
 	public int picset(int bno,String filename);
-	public int getBno(String id);
 	public ArrayList<FileDto> fileList();
-	public int getBno2(String id);
 	public int hashtag(int bno, String tagname);
+	public ArrayList<FileDto> hashtagList(); 
+	public ArrayList<FileDto> aside_hashtagList();
 	
 }

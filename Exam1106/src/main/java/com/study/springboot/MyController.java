@@ -55,7 +55,17 @@ public class MyController {
 	
 	@RequestMapping("/main")
 	public String main(HttpServletRequest req, Model model) throws Exception {
+		HttpSession session = req.getSession();
+		//각각의 list를 ArrayList로 생성 후 세션에 저장.
+		ArrayList<FileDto> hashlist = member_service.hashtagList();
+		ArrayList<FileDto> asidehashlist = member_service.aside_hashtagList();
+		ArrayList<FileDto> filelist = member_service.fileList();
+		ArrayList<BoardDto> list = board_service.list();
 		
+		session.setAttribute("filelist", filelist);
+		session.setAttribute("list", list);
+		session.setAttribute("asidehashlist", asidehashlist);
+		session.setAttribute("hashlist", hashlist);
 		
 		return "main";
 	}
@@ -118,12 +128,6 @@ public class MyController {
 			//로그인 성공 -> 세션에 아이디를 저장
 			HttpSession session = req.getSession();
 	   		session.setAttribute("sessionID", id);
-            
-            ArrayList<FileDto> filelist = member_service.fileList();
-    		ArrayList<BoardDto> list = board_service.list();
-    		
-    		req.getSession().setAttribute("filelist", filelist);
-    		req.getSession().setAttribute("list", list);
 	   		
 			model.addAttribute("msg","로그인 성공");
             model.addAttribute("url","/main");
@@ -230,13 +234,15 @@ public class MyController {
 			Model model,
 			MultipartHttpServletRequest mtfRequest,
 			@RequestParam("filename") MultipartFile[] file) throws Exception{
-		
+		req.setCharacterEncoding("utf-8");
 		HttpSession session = req.getSession();
 		
-		/*
-		 * String id = (String)session.getAttribute("sessionID");
-		 * member_service.getBno(id);
-		 */
+		// board에 bno생성하고 데이터입력.
+		String bname = (String)session.getAttribute("sessionID");
+		String bcontent = req.getParameter("bcontent");
+		int nResult = board_service.write(bname, bcontent);
+		
+		
 		String numberset = req.getParameter("number");
 		int number = Integer.parseInt(numberset);
 		ArrayList<BoardDto> list = board_service.list();
@@ -263,7 +269,7 @@ public class MyController {
 					get+=hashtag.charAt(k);
 				}
 				hashtagList.add(get);
-			}
+				}
 			}
 		}		
 		
@@ -285,19 +291,17 @@ public class MyController {
 		}
 		
 		
-		req.getSession().setAttribute("list", list);
-		req.getSession().setAttribute("filelist", filelist);
+		session.setAttribute("list", list);
+		session.setAttribute("filelist", filelist);
 		
 		
-		req.setCharacterEncoding("utf-8");
+
 		
-		String bname = (String)session.getAttribute("sessionID");
-		String bcontent = req.getParameter("bcontent");
 		
 		System.out.println(bname);
 		System.out.println(session.getAttribute("sessionID"));
 		
-		int nResult = board_service.write(bname, bcontent);
+		
 		if( nResult <= 0 ) {
 			System.out.println("글쓰기 실패");
 			

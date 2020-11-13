@@ -9,7 +9,9 @@
     <%@ page import="com.study.springboot.dto.FileDto" %>
 <%--     <%@ page import="com.study.springboot.dto.IMemberDao" %> --%>
     <% ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist"); 
-   	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");  	   
+   	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");  
+   	   ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
+   	   ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist");
     %>
 <!DOCTYPE html>
 <html>
@@ -124,14 +126,12 @@
                         </div>
                         <% gap++;
                         sum++;
-                        System.out.println("sum : "+sum);
                         
                         }else{ %>
                         <div class="carousel-item">
                             <img class="d-block w-100" src="upload/<%out.print(fileset.get(k).getFilename());%>" alt="next slide">
                         </div>
                         <%sum++;
-                        System.out.println("sum : "+sum);
                         }}} %> 
                       
 
@@ -164,7 +164,10 @@
                     <ul class="photo__comments">
                         <!-- 메인 글 내용 -->
                     	<li class="photo__comment"><span style="font-size: 20px;"><%out.print(board.get(i).getBcontent()); %></span>
-                        <li class="photo__comment"><a href="#"><span>해쉬태그</span></a></li>
+                    	<li class="photo__comment">
+                        <%for(int k=0;k<hashList.size();k++){
+                      		if(board.get(i).getBno()==hashList.get(k).getBno()){%>
+                        <a href="#"><span><%out.print(hashList.get(k).getTagname());%></span></a><%}}%></li>
                          <li class="photo__comment"><a href="#"><span>댓글 더보기</span></a></li>
                         <hr>
                     </ul>
@@ -197,7 +200,13 @@
                     </div>
                     <br>
                     <div style="border: 1px solid black; height: 5cm;">
-                        <a href="#"><p>Hash tag</p></a>
+                    <%for(int i=0;i<asidehashList.size();i++){
+                    	if(i==(asidehashList.size()-1)){ %>
+                        <a href="#"><span><%out.print(asidehashList.get(i).getTagname()); %></span></a>
+                        <%}else{%>
+                        <a href="#"><span><%out.print(asidehashList.get(i).getTagname()); %></span></a>,
+                     <%}}%>
+                        
                         
                     </div>
                         
