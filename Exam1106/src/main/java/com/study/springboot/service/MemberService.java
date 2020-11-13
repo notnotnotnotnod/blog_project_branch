@@ -24,13 +24,13 @@ public class MemberService implements IMemberService {
 
 	@Autowired
 	IMemberDao memberDao;
-	
+
 	@Autowired
 	IReplyDao replyDao;
-	
+
 	@Autowired
 	IBoardDao boardDao;
-	
+
 	@Autowired
 	MemberDto memberDto;
 
@@ -38,10 +38,10 @@ public class MemberService implements IMemberService {
 	PlatformTransactionManager transactionManager;
 	@Autowired
 	TransactionDefinition definition;
-	
+
 	@Override
 	public int insertMember(HttpServletRequest req) {
-		
+
 		memberDto.setId(req.getParameter("id"));
 		memberDto.setPassword(req.getParameter("password"));
 		memberDto.setName(req.getParameter("name"));
@@ -58,18 +58,18 @@ public class MemberService implements IMemberService {
 		int nResult = memberDao.loginCheckDao(id, pw);
 		return nResult;
 	}
-		@Override
+
+	@Override
 	public MemberDto getUserInfo(String id) {
 		return memberDao.getUserInfoDao(id);
 	}
 
-		@Override
-		public int picset(int bno,String filename) {
-			int nResult = memberDao.picset(bno, filename);
-			return nResult;
-		}
-		
-		
+	@Override
+	public int picset(int bno, String filename) {
+		int nResult = memberDao.picset(bno, filename);
+		return nResult;
+	}
+
 	@Override
 	public int updateMember(HttpServletRequest req) { // 세션이 가지고있는 로그인한ID 정보를 가져온다
 		HttpSession session = req.getSession();
@@ -85,19 +85,17 @@ public class MemberService implements IMemberService {
 		memberDto.setPhone(req.getParameter("phone"));
 		memberDto.setBio(req.getParameter("bio"));
 
-		
-		  System.out.println("password : "+req.getParameter("password"));
-		  System.out.println("name : "+req.getParameter("name"));
-		  System.out.println("gender : "+req.getParameter("gender"));
-		  System.out.println("mail : "+req.getParameter("mail"));
-		  System.out.println("phone : "+req.getParameter("phone"));
-		  System.out.println("bio : "+req.getParameter("bio"));
-		 
+		System.out.println("password : " + req.getParameter("password"));
+		System.out.println("name : " + req.getParameter("name"));
+		System.out.println("gender : " + req.getParameter("gender"));
+		System.out.println("mail : " + req.getParameter("mail"));
+		System.out.println("phone : " + req.getParameter("phone"));
+		System.out.println("bio : " + req.getParameter("bio"));
 
 		int nResult = memberDao.updateMemberDao(memberDto);
 		return nResult;
 	}
-	
+
 	@Override
 	public String FindId(String name, String mail) {
 		String nResult = memberDao.FindIdDao(name, mail);
@@ -109,77 +107,77 @@ public class MemberService implements IMemberService {
 		String nResult = memberDao.FindPwDao(id, name, mail);
 		return nResult;
 	}
-	
-	@Override
-	public int getBno2(String id) {
-		boardDao.bnodelete("get");
-		return 1;
-	}
-	
-	@Override
-	public int getBno(String id) {
-			boardDao.write(id, "get");
-			return 1;		
-	}
+
 	@Override
 	public int deleteMember(String id, String pw) {
 		TransactionStatus status = transactionManager.getTransaction(definition);
-		
+
 		try {
-			
+
 			boardDao.delete(id);
-			
+
 			memberDao.deleteMemberDao(id, pw);
-			
+
 			replyDao.delete(id);
-			
+
 			transactionManager.commit(status);
 			return 1;
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			System.out.println("오류발생");
 			transactionManager.rollback(status);
 			return 0;
-		}	
+		}
 	}
-	
-	@Override 
-	public int idCheck(String id) { 
-		int nResult =  memberDao.idCheckDao(id);
-		return nResult; 
-		}
-	
-	
-	@Override 
-	public int mailCheck(String mail) { 
-		int nResult =  memberDao.mailCheckDao(mail);
-		return nResult; 
-		}
-	
-	
+
 	@Override
-	public ArrayList<MemberDto> userList() { 
+	public int idCheck(String id) {
+		int nResult = memberDao.idCheckDao(id);
+		return nResult;
+	}
+
+	@Override
+	public int mailCheck(String mail) {
+		int nResult = memberDao.mailCheckDao(mail);
+		return nResult;
+	}
+
+	@Override
+	public ArrayList<MemberDto> userList() {
 		ArrayList<MemberDto> list = memberDao.userListDao();
-		return list; 
-		}
-	
-	@Override 
-	public int logoutDao() { 
-		return 1; //항상 성공 
-		}
-	
+		return list;
+	}
+
 	@Override
-	public ArrayList<FileDto> fileList(){
+	public int logoutDao() {
+		return 1; // 항상 성공
+	}
+
+	@Override
+	public ArrayList<FileDto> fileList() {
 		ArrayList<FileDto> list = memberDao.fileListDao();
 		return list;
 	}
-	
+
 	@Override
-	public int hashtag(int bno,String tagname) {
+	public int hashtag(int bno, String tagname) {
 		int nResult = memberDao.hashtag(bno, tagname);
 		return nResult;
 	}
-	
+
+	@Override
+	public ArrayList<FileDto> hashtagList() {
+		ArrayList<FileDto> list = memberDao.hashtagListDao();
+		return list;
+	}
+
+	@Override
+	public ArrayList<FileDto> aside_hashtagList() {
+		ArrayList<FileDto> list = memberDao.aside_hashtagListDao();
+		return list;
+	}
+	 
+
 	/*
 	 * @Override public MemberDto getUserInfo(String id) { return
 	 * memberDao.getUserInfoDao(id); }
@@ -208,7 +206,5 @@ public class MemberService implements IMemberService {
 	 * 
 	 * 
 	 */
-
-
 
 }

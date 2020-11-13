@@ -25,6 +25,8 @@ public interface IMemberDao
 	public int picset(@Param("bno") int bno,@Param("filename") String filename);
 	public ArrayList<FileDto> fileListDao();
 	public int hashtag(@Param("bno") int bno,@Param("tagname") String tagname);
+	public ArrayList<FileDto> hashtagListDao();
+	public ArrayList<FileDto> aside_hashtagListDao();
 	
 }
 
