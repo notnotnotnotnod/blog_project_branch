@@ -2,7 +2,6 @@ package com.study.springboot.service;
 
 import java.util.ArrayList;
 
-import com.study.springboot.dto.BoardDto;
 import com.study.springboot.dto.ReplyDto;
 
 public interface IReplyService {

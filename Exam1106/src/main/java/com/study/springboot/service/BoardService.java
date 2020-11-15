@@ -21,6 +21,12 @@ public class BoardService implements IBoardService {
 		int nResult = boardDao.write(bname, bcontent);
 		return nResult;
 	}
+	
+	@Override
+	public ArrayList<BoardDto> deletelist(String name){
+		ArrayList<BoardDto> deletelist = boardDao.deletelist(name);
+		return deletelist;
+	}
 
 	@Override
 	public ArrayList<BoardDto> list() {
@@ -45,6 +51,11 @@ public class BoardService implements IBoardService {
 	public int delete(String bid) {
 		
 		return boardDao.delete(bid);
+	}
+	
+	@Override
+	public int boarddelete(String bno) {
+		return boardDao.boarddelete(bno);
 	}
 
 	@Override

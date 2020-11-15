@@ -18,4 +18,6 @@ public interface IBoardDao {
     public int reply(String bid, String bname, String bcontent); //댓글작성
     public int upHit(String bid); //조회수 올리기
     public int bnodelete(String bcontent);
+    public ArrayList<BoardDto> deletelist(@Param("bname") String bname); //글삭제리스트
+    public int boarddelete(@Param("bno") String bno); //게시글 삭제.
 }

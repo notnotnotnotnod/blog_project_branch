@@ -7,7 +7,6 @@
     <%@ page import="com.study.springboot.dao.IBoardDao" %>    
 	<%@ page import="com.study.springboot.dto.BoardDto" %>
     <%@ page import="com.study.springboot.dto.FileDto" %>
-<%--     <%@ page import="com.study.springboot.dto.IMemberDao" %> --%>
     <% ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist"); 
    	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");  
    	   ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
@@ -52,6 +51,7 @@
             width: 100%;
             justify-content: center;
             flex-direction: column;
+            overflow:auto;
         }
 
         #icon {
@@ -69,7 +69,7 @@
             border-radius: 3px;
             border: 1px solid black;
             width: 577px;
-
+			
 
         }
 
@@ -78,8 +78,15 @@
             width: 50%;
         }
     </style>
-    <script >
-    /* alert('${msg}'); */
+    <script type="text/javascript">
+    function checkValue()
+	{ 	
+		if(document.userInfo.username.value != document.userInfo.sessionname.value ){			
+			alert("해당글을 수정/삭제 할 권한이 없습니다.");
+			System.out.println("실패");
+			return false;
+		}else System.out.println("성공");
+	}
     </script>
 </head>
 
@@ -111,9 +118,11 @@
             <div>
                 <header class="photo__header">
                     <img src="http://placehold.it/150x150" alt="프로필사진">
-                    <span class="photo__username" style="font-size: 20px;"><%out.print(board.get(i).getBname()); %></span>
+                    <span class="photo__username" style="font-size: 20px;" name="username"><%out.print(board.get(i).getBname()); %></span>
                 </header>
             </div>
+            <br>
+            <br>
             <div>
                 <div id="demo" class="carousel slide container align-center" data-ride="carousel">
                     <div class="carousel-inner">

@@ -3,9 +3,7 @@ package com.study.springboot.dao;
 import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
-import com.study.springboot.dto.BoardDto;
 import com.study.springboot.dto.ReplyDto;
 
 @Mapper

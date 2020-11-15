@@ -15,12 +15,20 @@
 		select * from blog_board order by bno desc
    	</select> 
    	
+   	<select id="deletelist" resultType="com.study.springboot.dto.BoardDto">
+   		select * from blog_board where bname = #{bname}
+   	</select>
+   	
    	<select id="contentView" resultType="com.study.springboot.dto.BoardDto"> 
 		select * from blog_board where bname=#{param1}
    	</select>
    	<update id="modify" parameterType="com.study.springboot.dto.BoardDto" >
         update blog_board set bname=#{param2}, btitle=#{param3}, bcontent=#{param4} where bid=#{param1}
    	</update>
+   	
+   	<delete id="boarddelete">
+   		delete from blog_board where bno=#{bno}
+   	</delete>
    	
    	<delete id="delete">
 		delete from blog_board where bname=#{param1}

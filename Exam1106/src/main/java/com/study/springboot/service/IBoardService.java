@@ -13,4 +13,6 @@ public interface IBoardService {
     public BoardDto reply_view(String str_bid); //댓글보기 
     public int reply(String bid, String bname, String bcontent); //댓글작성
     public int upHit(String bid); //조회수 올리기
+    public ArrayList<BoardDto> deletelist(String bname);
+    public int boarddelete(String bno);
 }

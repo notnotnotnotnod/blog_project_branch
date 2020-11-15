@@ -2,7 +2,7 @@ package com.study.springboot.service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.study.springboot.dao.IMemberDao;
-import com.study.springboot.dto.BoardDto;
+
 import com.study.springboot.dto.MemberDto;
 
 @Service

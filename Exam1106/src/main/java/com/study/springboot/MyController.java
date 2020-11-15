@@ -23,16 +23,16 @@ import com.study.springboot.service.FileUploadService;
 import com.study.springboot.service.IBoardService;
 import com.study.springboot.service.IMemberService;
 import com.study.springboot.service.IReplyService;
-
-
-
-
+import com.study.springboot.service.IWriteSetService;
 
 @Controller
 public class MyController {
 	
 	@Autowired
 	IMemberService member_service;	
+	
+	@Autowired
+	IWriteSetService Write_service;
 	
 	@Autowired
 	IBoardService board_service;
@@ -57,9 +57,9 @@ public class MyController {
 	public String main(HttpServletRequest req, Model model) throws Exception {
 		HttpSession session = req.getSession();
 		//각각의 list를 ArrayList로 생성 후 세션에 저장.
-		ArrayList<FileDto> hashlist = member_service.hashtagList();
-		ArrayList<FileDto> asidehashlist = member_service.aside_hashtagList();
-		ArrayList<FileDto> filelist = member_service.fileList();
+		ArrayList<FileDto> hashlist = Write_service.hashtagList();
+		ArrayList<FileDto> asidehashlist = Write_service.aside_hashtagList();
+		ArrayList<FileDto> filelist = Write_service.fileList();
 		ArrayList<BoardDto> list = board_service.list();
 		
 		session.setAttribute("filelist", filelist);
@@ -83,6 +83,34 @@ public class MyController {
 	@RequestMapping("/ask")
 	public String ask() throws Exception {
 		return "ask";
+	}
+	
+	@RequestMapping("/deleteboard")
+	public String deleteboard(HttpServletRequest req, Model model) throws Exception{
+		HttpSession session = req.getSession();
+		String name = (String)session.getAttribute("sessionID");
+		ArrayList<BoardDto> deletelist = board_service.deletelist(name);
+		session.setAttribute("deletelist", deletelist);		
+		return "deleteboard";
+	}
+	
+	@RequestMapping("/deleteAction")
+	public String deleteAction(HttpServletRequest req, Model model) throws Exception{
+		HttpSession session = req.getSession();
+		//String name = (String)session.getAttribute("sessionID");
+		String bno = req.getParameter("bno");
+		System.out.println(bno);
+		int nResult = board_service.boarddelete(bno);
+		if(nResult <= 0) {
+			System.out.println("글 삭제 실패");
+			model.addAttribute("msg","글삭제실패");
+			model.addAttribute("url","/mypage");
+		}else {
+			System.out.println("글 삭제 성공");
+			model.addAttribute("msg","글삭제성공");
+			model.addAttribute("url","/mypage");
+		}
+		return "redirect";
 	}
 	
 	@RequestMapping("/join")
@@ -246,7 +274,7 @@ public class MyController {
 		String numberset = req.getParameter("number");
 		int number = Integer.parseInt(numberset);
 		ArrayList<BoardDto> list = board_service.list();
-		ArrayList<FileDto> filelist = member_service.fileList();
+	ArrayList<FileDto> filelist = Write_service.fileList();
 		
 		ArrayList fileset = new ArrayList();
 		//해시태그란에 들어있던 해시태그를 ,기준으로 받아서 #OOO으로 ArrayList에 삽입.
@@ -274,7 +302,7 @@ public class MyController {
 		}		
 		
 		for(int i=0;i<hashtagList.size();i++) {
-			member_service.hashtag(number,(String)hashtagList.get(i));
+			Write_service.hashtag(number,(String)hashtagList.get(i));
 		}
 		
 			 
@@ -287,7 +315,7 @@ public class MyController {
 		}
 		for(int i=0;i<fileset.size();i++) {
 			System.out.println("파일이름 : "+fileset.get(i));
-			int result = member_service.picset(number, (String)fileset.get(i));
+			int result = Write_service.picset(number, (String)fileset.get(i));
 		}
 		
 		
