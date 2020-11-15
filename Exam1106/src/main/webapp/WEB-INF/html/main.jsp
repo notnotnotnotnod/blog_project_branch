@@ -7,11 +7,13 @@
     <%@ page import="com.study.springboot.dao.IBoardDao" %>    
 	<%@ page import="com.study.springboot.dto.BoardDto" %>
     <%@ page import="com.study.springboot.dto.FileDto" %>
+    <%@ page import="com.study.springboot.dto.ReplyDto" %>
 <%--     <%@ page import="com.study.springboot.dto.IMemberDao" %> --%>
     <% ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist"); 
    	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");  
    	   ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
    	   ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist");
+   	   ArrayList<ReplyDto> rlist = (ArrayList<ReplyDto>)session.getAttribute("listBoard");
     %>
 <!DOCTYPE html>
 <html>
@@ -168,17 +170,25 @@
                         <%for(int k=0;k<hashList.size();k++){
                       		if(board.get(i).getBno()==hashList.get(k).getBno()){%>
                         <a href="#"><span><%out.print(hashList.get(k).getTagname());%></span></a><%}}%></li>
-                         <li class="photo__comment"><a href="#"><span>댓글 더보기</span></a></li>
+                         <li class="photo__comment">
+						<!-- 댓글 보기 / 쓰기 -->
+                         	<form action="coment" method=post>
+	                         	<input type="hidden" id="bno" name="bno" value="<%=board.get(i).getBno()%>">
+	                         	<button class="btn btn-outline-secondary" type="submit" id="button-addon2">댓글 더보기</button>
+	                        </form>
+                         </li>
                         <hr>
                     </ul>
-                    <ul class="photo__comments">
-                        <li class="photo__comment">
-                            <span class="photo__comment-author">댓글작성자닉네임</span> 이뻐요!
-                        </li>
-                        <li class="photo__comment">
-                            <span class="photo__comment-author">댓글작성자닉네임</span> 이뻐요!
-                        </li>
-                    </ul>
+
+				  		<% for(int r=0; r<rlist.size(); r++) { 
+				  			  if(board.get(i).getBno()==rlist.get(r).getBno()){%>
+				  	 <ul class="photo__comments"> 
+                         <li class="photo__comment">
+                             <span class="photo__comment-author"><b><%out.print( rlist.get(r).getRname()); %></b></span>
+                             &nbsp <%out.print(rlist.get(r).getRcontent());%>
+                         </li>
+                         <% }} %>
+                     </ul>
                     <span class="photo__date"><%out.print(board.get(i).getBdate()); %></span>
                     <hr>
                     <div class="photo__add-comment-container">

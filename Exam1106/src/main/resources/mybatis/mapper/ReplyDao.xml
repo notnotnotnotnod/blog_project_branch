@@ -10,17 +10,28 @@
 		select * from reply where rno=#{param1}
    	</select>
    	<insert id="reply" parameterType="com.study.springboot.dto.ReplyDto">
-   	    insert into reply (rno, rname, rcontent) 
-   	    	values (blog_board_seq.nextval, #{param1}, #{param2})
+   	    insert into reply (rno, bno, rname, rcontent) 
+   	    	values (blog_board_seq.nextval, #{param1}, #{param2}, #{param3})
    	</insert>
 	
 	<select id="rlist" resultType="com.study.springboot.dto.ReplyDto"> 
-		select * from reply
+		select * from reply where bno=#{param1}
    	</select> 
+   	
+   	<select id="replyList" resultType="com.study.springboot.dto.ReplyDto"> 
+		select * from reply order by bno desc
+   	</select>
    	
    	<delete id="delete">
 		delete from reply where rname=#{param1}
 	</delete>
+
+	<update id="updateReplyDao" parameterType="com.study.springboot.dto.ReplyDto" >
+        update reply set rcontent = #{rcontent} where rno = #{rno}
+   	</update>
 	
+   	<delete id="deleteReplyDao">
+		delete from reply where rno=#{rno}
+	</delete>		
 </mapper>
 

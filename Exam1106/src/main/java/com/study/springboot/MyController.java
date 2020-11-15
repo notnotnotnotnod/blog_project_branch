@@ -57,15 +57,18 @@ public class MyController {
 	public String main(HttpServletRequest req, Model model) throws Exception {
 		HttpSession session = req.getSession();
 		//각각의 list를 ArrayList로 생성 후 세션에 저장.
+		
 		ArrayList<FileDto> hashlist = member_service.hashtagList();
 		ArrayList<FileDto> asidehashlist = member_service.aside_hashtagList();
 		ArrayList<FileDto> filelist = member_service.fileList();
 		ArrayList<BoardDto> list = board_service.list();
+		ArrayList<ReplyDto> rlist = reply_service.replyList();
 		
 		session.setAttribute("filelist", filelist);
 		session.setAttribute("list", list);
 		session.setAttribute("asidehashlist", asidehashlist);
 		session.setAttribute("hashlist", hashlist);
+		session.setAttribute("listBoard", rlist);
 		
 		return "main";
 	}
@@ -370,11 +373,21 @@ public class MyController {
 
 	@RequestMapping("/coment")
 	public String coment(HttpServletRequest req) throws Exception {
+		HttpSession session = req.getSession();
 		
-		ArrayList<ReplyDto> rlist = reply_service.rlist();
+		String bno = req.getParameter("bno");
+		System.out.println("bno(mc)="+bno);
+		
+		ArrayList<BoardDto> list = board_service.list();
+		System.out.println("게시판리스트:" + list);
+		
+		ArrayList<ReplyDto> rlist = reply_service.rlist(bno);
 		System.out.println("댓글리스트:" + rlist);
 		
-		req.getSession().setAttribute("listBoard", rlist);
+		session.setAttribute("list", list);
+		session.setAttribute("listBoard", rlist);
+		session.setAttribute("bno", bno);
+//		req.getSession().setAttribute("listBoard", rlist);
 		
 		return "coment";
 	}
@@ -428,12 +441,17 @@ public class MyController {
 	public String reply(HttpServletRequest req, Model model) throws Exception {
 		
 		req.setCharacterEncoding("utf-8"); // 인코딩
+		HttpSession session = req.getSession();
 		
-//        String bno = req.getParameter("bno");
+        String bno = req.getParameter("bno");
         String rname = req.getParameter("rname");
         String rcontent = req.getParameter("rcontent");
         
-		int nResult = reply_service.reply(rname, rcontent);
+        System.out.println("bno(mc)(reply)="+bno);
+        System.out.println("rname(mc)(reply)="+rname);
+        System.out.println("rcontent(mc)(reply)="+rcontent);
+        
+		int nResult = reply_service.reply(bno, rname, rcontent);
 		if( nResult <= 0 ) {
 			System.out.println("댓글작성 실패");
 			
@@ -443,10 +461,61 @@ public class MyController {
 			System.out.println("댓글작성 성공");
 			
 			model.addAttribute("msg","댓글작성 성공");
-            model.addAttribute("url","/coment");
+            model.addAttribute("url","/main");
 		}
 		
 		return "redirect";
+	}
+	
+	
+	@RequestMapping(value="/reply_modify", method=RequestMethod.POST, produces = "text/html; charset=UTF-8")
+	public String reply_modify(HttpServletRequest req, Model model) throws Exception {
+		req.setCharacterEncoding("utf-8");
+		
+		int nResult = reply_service.updateReply(req);
+		
+		System.out.println("rno=" + req.getParameter("rno"));
+		System.out.println("rname=" + req.getParameter("rname"));
+		System.out.println("rcontent=" + req.getParameter("rcontent"));
+		
+		if( nResult <= 0 ) {
+			System.out.println("댓글수정 실패");
+			
+			model.addAttribute("msg","댓글수정 실패");
+			model.addAttribute("url","/coment");
+			return "redirect";
+		}else {
+			System.out.println("댓글수정 성공");
+			
+			model.addAttribute("msg","댓글수정 성공");
+			model.addAttribute("url","/main");
+			return "redirect";
+		}	
+	}
+	
+	@RequestMapping(value="/reply_delete", method=RequestMethod.POST, produces = "text/html; charset=UTF-8")
+	public String reply_delete(HttpServletRequest req, Model model) throws Exception {
+		req.setCharacterEncoding("utf-8");
+		
+		int nResult = reply_service.deleteReply(req);
+		
+		System.out.println("rno=" + req.getParameter("rno"));
+		System.out.println("rname=" + req.getParameter("rname"));
+		System.out.println("rcontent=" + req.getParameter("rcontent"));
+		
+		if( nResult <= 0 ) {
+			System.out.println("댓글삭제 실패");
+			
+			model.addAttribute("msg","댓글삭제 실패");
+			model.addAttribute("url","/coment");
+			return "redirect";
+		}else {
+			System.out.println("댓글삭제 성공");
+			
+			model.addAttribute("msg","댓글삭제 성공");
+			model.addAttribute("url","/main");
+			return "redirect";
+		}	
 	}
 	
 }
