@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.study.springboot.dao.IWriteSetDao"> 
+    
+    <insert id="picset" parameterType="com.study.springboot.dto.FileDto">
+		insert into pic_board (bno,filename)
+			values (blog_board_seq.currval, #{filename})
+	</insert>
+	
+	<insert id="hashtag" parameterType="com.study.springboot.dto.FileDto">
+		insert into hashtag_board (bno,tagname)
+			values (blog_board_seq.currval, #{tagname})
+	</insert>
+	
+	<select id="aside_hashtagListDao" resultType="com.study.springboot.dto.FileDto">
+		select distinct tagname from hashtag_board
+	</select>
+	
+	<select id="hashtagListDao" resultType="com.study.springboot.dto.FileDto">
+		select * from hashtag_board order by bno desc
+	</select>
+	
+	
+	<select id="fileListDao" resultType="com.study.springboot.dto.FileDto">
+		select * from pic_board order by bno desc
+	</select>
+    
+</mapper>
