@@ -12,7 +12,7 @@ public interface IBoardDao {
 	public int write(@Param("bname") String bname,@Param("bcontent") String bcontent); //글작성
     public ArrayList<BoardDto> list(); //글목록
     public BoardDto contentView(String bid_str); //글내용
-    public int modify(String bid, String bname, String btitle, String bcontent); //글수정
+    public int modify(@Param("bno") int bno,@Param("bcontent") String bcontent); //글수정
     public int delete(String bname); //글삭제
     public BoardDto reply_view(String str_bid); //댓글보기 
     public int reply(String bid, String bname, String bcontent); //댓글작성

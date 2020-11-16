@@ -1,21 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.ArrayList"%>
+    <%@ page import="java.util.ArrayList"%>
     <%@ page import="com.study.springboot.MyController" %>
     <%@ page import="com.study.springboot.dao.IBoardDao" %>    
 	<%@ page import="com.study.springboot.dto.BoardDto" %>
-	<% ArrayList<BoardDto> list = (ArrayList<BoardDto>)session.getAttribute("deletelist"); %>
+	<% ArrayList<BoardDto> list = (ArrayList<BoardDto>)session.getAttribute("modifylist"); %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>글삭제페이지</title>
+    <title>글 수정페이지</title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     rel="stylesheet">
     <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" 
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     
 </head>
 <body>
@@ -40,10 +41,10 @@
     <ul class="list-group">
     <%for(int i=0;i<list.size();i++){ %>
         <li class="list-group-item"> 
-        <form method="post" action="deleteAction" >
-        <%out.print(list.get(i).getBcontent()); %>
+        <form method="post" action="modifyAction" >
+        <textarea cols="60" name="bcontent"><%out.print(list.get(i).getBcontent()); %></textarea>
         <input id="check_hidden" type="hidden"	name="bno" value=<%out.print(list.get(i).getBno()); %> />
-        <input class="btn btn-outline-info" type="submit" value="글삭제" style="float: right;">         
+        <input class="btn btn-outline-info" type="submit" value="글수정" style="float: right;">         
         <span style="float: right;">게시된 시간 : <%out.print(list.get(i).getBdate());%></span>
         </form>     
         </li>

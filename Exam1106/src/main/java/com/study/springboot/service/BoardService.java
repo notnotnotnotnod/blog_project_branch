@@ -42,9 +42,9 @@ public class BoardService implements IBoardService {
 	}
 
 	@Override
-	public int modify(String bid, String bname, String btitle, String bcontent) {
-		
-		return boardDao.modify(bid, bname, btitle, bcontent);
+	public int modify(int bno, String bcontent) {
+		int nResult = boardDao.modify(bno, bcontent);
+		return nResult;
 	}
 
 	@Override

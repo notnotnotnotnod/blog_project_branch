@@ -96,6 +96,34 @@ public class MyController {
 		return "deleteboard";
 	}
 	
+	@RequestMapping("/modifyboard")
+	public String bodifyboard(HttpServletRequest req, Model model) throws Exception{
+		HttpSession session = req.getSession();
+		String name = (String)session.getAttribute("sessionID");
+		ArrayList<BoardDto> deletelist = board_service.deletelist(name);
+		session.setAttribute("modifylist", deletelist);		
+		return "modifyboard";
+	}
+	
+	@RequestMapping("/modifyAction")
+	public String modifyboardAction(HttpServletRequest req, Model model) throws Exception{
+		HttpSession session = req.getSession();
+		int bno = Integer.parseInt(req.getParameter("bno"));
+		String bcontent = req.getParameter("bcontent");
+		System.out.println("bno : "+bno+"bcontent : "+bcontent);
+		int nResult = board_service.modify(bno, bcontent);
+		if(nResult <= 0) {
+			System.out.println("글 수정 실패");
+			model.addAttribute("msg","글수정실패");
+			model.addAttribute("url","/mypage");
+		}else {
+			System.out.println("글 수정 성공");
+			model.addAttribute("msg","글수정성공");
+			model.addAttribute("url","/mypage");
+		}
+		return "redirect";
+	}
+	
 	@RequestMapping("/deleteAction")
 	public String deleteAction(HttpServletRequest req, Model model) throws Exception{
 		HttpSession session = req.getSession();

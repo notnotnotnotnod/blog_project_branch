@@ -67,7 +67,10 @@
           <input type="submit" value="로그아웃" style="float: right;">
           </form>
           <form action="deleteboard" >
-          <input type="submit" value="글 수정/삭제" style="float: right;">
+          <input type="submit" value="글 삭제" style="float: right;">
+          </form>
+          <form action="modifyboard" >
+          <input type="submit" value="글 수정" style="float: right;">
           </form>
       </h1>
       </header>
