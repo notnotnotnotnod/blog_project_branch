@@ -2,19 +2,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-    <%@ page import="java.util.ArrayList"%>
-    <%@ page import="com.study.springboot.MyController" %>
-    <%@ page import="com.study.springboot.dao.IBoardDao" %>    
-	<%@ page import="com.study.springboot.dto.BoardDto" %>
-    <%@ page import="com.study.springboot.dto.FileDto" %>
-    <%@ page import="com.study.springboot.dto.ReplyDto" %>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="com.study.springboot.MyController" %>
+<%@ page import="com.study.springboot.dao.IBoardDao" %>    
+<%@ page import="com.study.springboot.dto.BoardDto" %>
+<%@ page import="com.study.springboot.dto.FileDto" %>
+<%@ page import="com.study.springboot.dto.ReplyDto" %>
 
-    <% ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist"); 
-   	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");  
-   	   ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
-   	   ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist");
-   	   ArrayList<ReplyDto> rlist = (ArrayList<ReplyDto>)session.getAttribute("listBoard");
-    %>
+<% ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist1");
+	ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist1");
+	ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist1");
+	ArrayList<ReplyDto> listBoard = (ArrayList<ReplyDto>)session.getAttribute("listBoard1");
+	ArrayList<BoardDto> list = (ArrayList<BoardDto>)session.getAttribute("list1");
+
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +28,7 @@
     <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/modal.css">
-    <title>메인페이지</title>
+    <title>검색페이지</title>
         
     <style>
         @media screen and (max-width: 1460px){
@@ -105,16 +107,15 @@
           </nav>
     </header>
     <main id="feed">
-    <% for(int i=0;i<board.size();i++) {
+    <% for(int i=0;i<list.size();i++){
     	int sum=0;
     	int gap=0;
-   		
-    %>
+    	%>
         <div id="section">
             <div>
                 <header class="photo__header">
                     <img src="http://placehold.it/150x150" alt="프로필사진">
-                    <span class="photo__username" style="font-size: 20px;" name="username"><%out.print(board.get(i).getBname()); %></span>
+                    <span class="photo__username" style="font-size: 20px;" name="username"><%out.print(list.get(i).getBname()); %></span>
                 </header>
             </div>
             <br>
@@ -124,7 +125,7 @@
                     <div class="carousel-inner">
                         <!-- 슬라이드 쇼 -->
                        <%for(int k=0;k<fileset.size();k++){
-                      		if(board.get(i).getBno()==fileset.get(k).getBno()){System.out.println(fileset.get(k).getFilename());
+                      		if(list.get(i).getBno()==fileset.get(k).getBno()){System.out.println(fileset.get(k).getFilename());
                       			if(gap==0){%>                    		
                         <div class="carousel-item active">
                             <img class="d-block w-100" src="upload/<%out.print(fileset.get(k).getFilename());%>" alt="First slide">
@@ -168,31 +169,31 @@
 
                     <ul class="photo__comments">
                         <!-- 메인 글 내용 -->
-                    	<li class="photo__comment"><span style="font-size: 20px;"><%out.print(board.get(i).getBcontent()); %></span>
+                    	<li class="photo__comment"><span style="font-size: 20px;"><%out.print(list.get(i).getBcontent()); %></span>
                     	<li class="photo__comment">
                         <%for(int k=0;k<hashList.size();k++){
-                      		if(board.get(i).getBno()==hashList.get(k).getBno()){%>
+                      		if(list.get(i).getBno()==hashList.get(k).getBno()){%>
                         <a href="#"><span><%out.print(hashList.get(k).getTagname());%></span></a><%}}%></li>
                          <li class="photo__comment">
 						<!-- 댓글 보기 / 쓰기 -->
                          	<form action="coment" method=post>
-	                         	<input type="hidden" id="bno" name="bno" value="<%=board.get(i).getBno()%>">
+	                         	<input type="hidden" id="bno" name="bno" value="<%=list.get(i).getBno()%>">
 	                         	<button class="btn btn-outline-secondary" type="submit" id="button-addon2">댓글 더보기</button>
 	                        </form>
                          </li>
                         <hr>
                     </ul>
 
-				  		<% for(int r=0; r<rlist.size(); r++) { 
-				  			  if(board.get(i).getBno()==rlist.get(r).getBno()){%>
+				  		<% for(int r=0; r<listBoard.size(); r++) { 
+				  			  if(list.get(i).getBno()==listBoard.get(r).getBno()){%>
 				  	 <ul class="photo__comments"> 
                          <li class="photo__comment">
-                             <span class="photo__comment-author"><b><%out.print( rlist.get(r).getRname()); %></b></span>
-                             &nbsp <%out.print(rlist.get(r).getRcontent());%>
+                             <span class="photo__comment-author"><b><%out.print( listBoard.get(r).getRname()); %></b></span>
+                             &nbsp <%out.print(listBoard.get(r).getRcontent());%>
                          </li>
                          <% }} %>
                      </ul>
-                    <span class="photo__date"><%out.print(board.get(i).getBdate()); %></span>
+                    <span class="photo__date"><%out.print(list.get(i).getBdate()); %></span>
                     <hr>
                     <div class="photo__add-comment-container">
                         <textarea placeholder="댓글을 작성하세요.."></textarea>

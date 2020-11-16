@@ -53,6 +53,48 @@ public class MyController {
 		return "login";
 	}
 	
+	@RequestMapping("/searchpage")
+	public String searchpage() throws Exception{
+		return "searchpage";
+	}
+	
+	@RequestMapping("/searchAction")
+	public String searchAction(HttpServletRequest req, Model model) throws Exception{
+		HttpSession session = req.getSession();
+		
+		String search = req.getParameter("search");
+		System.out.println("search값 :"+search);
+		ArrayList<FileDto> hashlist1 = Write_service.hashtagList();
+		ArrayList<FileDto> asidehashlist1 = Write_service.aside_hashtagList();
+		ArrayList<FileDto> filelist1 = Write_service.fileList();
+		ArrayList<ReplyDto> rlist1 = reply_service.replyList();
+		ArrayList<BoardDto> searchlist1 = board_service.searchlist(search);		
+		if(searchlist1.size()==0) {
+			ArrayList<BoardDto> searchlist2 = board_service.searchlist2(search);
+			System.out.println("searchlist2 :"+searchlist2.size());
+			session.setAttribute("list1", searchlist2);
+		}else{
+			session.setAttribute("list1", searchlist1);
+			System.out.println("searchlist: "+searchlist1.size());
+			}
+			/*
+			 * System.out.println("hashlist : "+hashlist1.size());
+			 * System.out.println("asidehashlist: "+asidehashlist1.size());
+			 * System.out.println("filelist : "+filelist1.size());
+			 * System.out.println("rlist : "+filelist1.size());
+			 */
+						
+		session.setAttribute("filelist1", filelist1);
+		session.setAttribute("asidehashlist1", asidehashlist1);
+		session.setAttribute("hashlist1", hashlist1);
+		session.setAttribute("listBoard1", rlist1);
+		
+		model.addAttribute("msg",search+"검색");
+		model.addAttribute("url","/searchpage");
+		
+		return "redirect";
+	}
+	
 	@RequestMapping("/main")
 	public String main(HttpServletRequest req, Model model) throws Exception {
 		HttpSession session = req.getSession();
@@ -69,6 +111,7 @@ public class MyController {
 		session.setAttribute("hashlist", hashlist);
 		session.setAttribute("listBoard", rlist);
 		
+	
 		return "main";
 	}
 
