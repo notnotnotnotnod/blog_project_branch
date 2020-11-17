@@ -51,7 +51,24 @@ public class BoardService implements IBoardService {
 		ArrayList<BoardDto> list = boardDao.list();
 		return list;
 	}
-
+	
+	@Override
+	public ArrayList<BoardDto> pageList(String page) {
+		
+		int num_page_no = Integer.parseInt(page); //page번호
+		int num_page_size = 5; //한 화면당 보여줄 페이지 수
+		int startRowNum = (num_page_no -1) * num_page_size + 1; // 1, 6, 11페이지 시작 줄번호
+		int endRowNum = (num_page_no * num_page_size); //5, 10, 15페이지 끝 줄번호
+		
+		System.out.println("num_page_no"+num_page_no);
+		System.out.println("num_page_size"+num_page_size);
+		System.out.println("startRowNum"+startRowNum);
+		System.out.println("endRowNum"+endRowNum);
+		
+		ArrayList<BoardDto> list = boardDao.pageList(startRowNum, endRowNum);
+		return list;
+	}
+	
 	@Override
 	public BoardDto contentView(String bid_str) {
 		boardDao.upHit(bid_str);

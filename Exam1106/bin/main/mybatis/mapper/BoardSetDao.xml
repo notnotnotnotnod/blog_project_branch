@@ -20,6 +20,10 @@
 		select distinct tagname from hashtag_board
 	</select>
 	
+	<select id="TagSearchListDao" resultType="com.study.springboot.dto.FileDto">
+		select * from hashtag_board where tagname = #{tagname}
+	</select>
+	
 	<select id="hashtagListDao" resultType="com.study.springboot.dto.FileDto">
 		select * from hashtag_board order by bno desc
 	</select>

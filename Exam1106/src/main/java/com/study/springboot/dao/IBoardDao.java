@@ -11,6 +11,7 @@ import com.study.springboot.dto.BoardDto;
 public interface IBoardDao {
 	public int write(@Param("bname") String bname,@Param("bcontent") String bcontent); //글작성
     public ArrayList<BoardDto> list(); //글목록
+	public ArrayList<BoardDto> pageList(int startRowNum, int endRowNum); //페이징 글목록
     public BoardDto contentView(String bid_str); //글내용
     public int modify(@Param("bno") int bno,@Param("bcontent") String bcontent); //글수정
     public int delete(String bname); //글삭제

@@ -118,18 +118,22 @@ public class MyController {
 	public String main(HttpServletRequest req, Model model) throws Exception {
 		HttpSession session = req.getSession();
 		//각각의 list를 ArrayList로 생성 후 세션에 저장.
+		
+		String page = (String)session.getAttribute("page");
+		System.out.println("page(mc)="+page); //시작 페이지 넘버
+		
 		ArrayList<FileDto> hashlist = Write_service.hashtagList();
 		ArrayList<FileDto> asidehashlist = Write_service.aside_hashtagList();
 		ArrayList<FileDto> filelist = Write_service.fileList();
-		ArrayList<BoardDto> list = board_service.list();
+		ArrayList<BoardDto> pagelist = board_service.pageList(page);
 		ArrayList<ReplyDto> rlist = reply_service.replyList();
 		
 		session.setAttribute("filelist", filelist);
-		session.setAttribute("list", list);
+		session.setAttribute("list", pagelist);
 		session.setAttribute("asidehashlist", asidehashlist);
 		session.setAttribute("hashlist", hashlist);
 		session.setAttribute("listBoard", rlist);
-		
+		req.getSession().setAttribute("page", page);
 	
 		return "main";
 	}
@@ -248,6 +252,7 @@ public class MyController {
 			//로그인 성공 -> 세션에 아이디를 저장
 			HttpSession session = req.getSession();
 	   		session.setAttribute("sessionID", id);
+	   		session.setAttribute("page", "1");
 	   		
 			model.addAttribute("msg","로그인 성공");
             model.addAttribute("url","/main");

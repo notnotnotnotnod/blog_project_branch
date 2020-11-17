@@ -30,6 +30,19 @@
    	<select id="BnoSearchList" resultType="com.study.springboot.dto.BoardDto">
    		select * from blog_board where bno = #{bno}
    	</select>
+	
+   	<select id="pageList" resultType="com.study.springboot.dto.BoardDto"> 
+		select * from
+		( 
+			select
+				rownum as rnum, blog_board.*
+			from
+				blog_board
+			order by bdate desc, bno desc
+		)
+		where
+		bno between #{param1} and #{param2}
+   	</select>
    	
    	<select id="contentView" resultType="com.study.springboot.dto.BoardDto"> 
 		select * from blog_board where bname=#{param1}

@@ -7,6 +7,7 @@ import com.study.springboot.dto.BoardDto;
 public interface IBoardService {
 	public int write(String bname, String bcontent); //글작성
     public ArrayList<BoardDto> list(); //글목록
+	public ArrayList<BoardDto> pageList(String page); //페이징 글목록
     public BoardDto contentView(String bid_str); //글내용
     public int modify(int bno, String bcontent); //글수정
     public int delete(String bid); //글삭제
