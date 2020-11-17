@@ -10,10 +10,14 @@
     <%@ page import="com.study.springboot.dto.ReplyDto" %>
 
     <% ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist"); 
-   	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");  
+   	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");
+   	   ArrayList<BoardDto> totallist =(ArrayList<BoardDto>)session.getAttribute("totallist");
    	   ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
    	   ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist");
    	   ArrayList<ReplyDto> rlist = (ArrayList<ReplyDto>)session.getAttribute("listBoard");
+   	   
+   	   int num_page_size = 5; //한 화면당 보여줄 페이지 수
+   	   int totalpage = (int)Math.ceil(totallist.size()/(double)num_page_size);
     %>
 <!DOCTYPE html>
 <html>
@@ -125,7 +129,7 @@
                         <!-- 슬라이드 쇼 -->
                        <%for(int k=0;k<fileset.size();k++){
                       		if(board.get(i).getBno()==fileset.get(k).getBno()){System.out.println(fileset.get(k).getFilename());
-                      			if(gap==0){%>                    		
+                      			if(gap==0){%>
                         <div class="carousel-item active">
                             <img class="d-block w-100" src="upload/<%out.print(fileset.get(k).getFilename());%>" alt="First slide">
                         </div>
@@ -243,11 +247,9 @@
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-	                        <li class="page-item"><a class="page-link" href="main?page=1">1</a></li>
-	                        <li class="page-item"><a class="page-link" href="main?page=2">2</a></li>
-	                        <li class="page-item"><a class="page-link" href="main?page=3">3</a></li>
-	                        <li class="page-item"><a class="page-link" href="main?page=4">4</a></li>
-	                        <li class="page-item"><a class="page-link" href="main?page=5">5</a></li>
+                        	<%for(int i=1;i<=totalpage;i++){%>
+		                        <li class="page-item"><a class="page-link" href="main?page=<%=i%>"><%=i%></a></li>
+	                        <%}%>
                         <li class="page-item">
                             <a class="page-link" href="#" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
@@ -273,7 +275,7 @@
                 <li class="footer__item"><a href="#" class="footer__link">Language</a></li>
               </ul>
             </nav>
-            <span class="footer__copyright">© 2017 jejugram</span>
+            <span class="footer__copyright">© 2020</span>
     </footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

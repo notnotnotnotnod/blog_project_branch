@@ -119,17 +119,21 @@ public class MyController {
 		HttpSession session = req.getSession();
 		//각각의 list를 ArrayList로 생성 후 세션에 저장.
 		
-		String page = (String)session.getAttribute("page");
+		String page = req.getParameter("page");
 		System.out.println("page(mc)="+page); //시작 페이지 넘버
+		if( page == null) page = "1";
+		if( page.length() < 1) page = "1";
 		
 		ArrayList<FileDto> hashlist = Write_service.hashtagList();
 		ArrayList<FileDto> asidehashlist = Write_service.aside_hashtagList();
 		ArrayList<FileDto> filelist = Write_service.fileList();
 		ArrayList<BoardDto> pagelist = board_service.pageList(page);
+		ArrayList<BoardDto> totallist = board_service.list();
 		ArrayList<ReplyDto> rlist = reply_service.replyList();
 		
 		session.setAttribute("filelist", filelist);
 		session.setAttribute("list", pagelist);
+		session.setAttribute("totallist", totallist);
 		session.setAttribute("asidehashlist", asidehashlist);
 		session.setAttribute("hashlist", hashlist);
 		session.setAttribute("listBoard", rlist);
