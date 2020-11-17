@@ -33,23 +33,26 @@
 	</script>
 </head>
 <body>
-  <nav class="navigation">
-    
-      <img src="images/logo.png" />
-    
-    <input type="text" placeholder="Search">
-    <div class="navigation__links">
-      <a href="main" class="navigation__link">
-          <i class="fa fa-compass"></i>
-      </a>
-      <a href="#" class="navigation__link">
-          <i class="fa fa-heart-o"></i>
-      </a>
-      <a href="mypage" class="navigation__link">
-          <i class="fa fa-user-o"></i>
-      </a>
-    </div>
-  </nav>
+  <header>
+        <nav class="navigation fixed-top">
+              <img src="images/logo.png" />
+            <form action="searchAction" method="post">
+            <input type="text" name="search" placeholder="Search">
+            <button type="submit" class="btn btn-outline-secondary">검색</button>
+            </form>
+            <div class="navigation__links">
+              <a href="main" class="navigation__link">
+                  <i class="fa fa-compass"></i>
+              </a>
+              <a href="#" class="navigation__link">
+                  <i class="fa fa-heart-o"></i>
+              </a>
+              <a href="mypage" class="navigation__link">
+                  <i class="fa fa-user-o"></i>
+              </a>
+            </div>
+          </nav>
+    </header>
       
   <main id="edit-profile">
     <div class="edit-profile__container u-default-box">
