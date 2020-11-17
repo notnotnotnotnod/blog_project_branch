@@ -29,48 +29,8 @@
 				return false;
 			}
 
-			var MailChecked = $('#check_hidden1').val();
-			if( MailChecked != "yes") {
-				alert("메일 중복확인을 해주세요.");
-				return false;
-			}
 		}
 		
-		function mailCheck() {
-			var user_mail = $('#mail').val();
-			
-			if(!user_mail){
-				alert("메일을 입력하세요.");
-				return false;
-			}
-			// ajax 용도 : 화면 갱신(reload,redirect)가 없이
-			//            부분화면 갱신(통신)을 js에서 한다.
-			//           예)네이버 - 실시간검색어, 실시간날씨
-			
-			// 아이디 유효성 검사(1 = 중복 / 0 != 중복)
-			$.ajax({
-				/* url : 'http://localhost:8080/servlet3_LoginJoinDB/IdCheckAction.do?id='+ user_id, */
-				url : '${pageContext.request.contextPath}/MailCheckAction?='+ user_mail,
-				type : 'get',
-				success : function(data) {
-					console.log("1 = 중복됨, 0 = 중복안됨 : "+ data);							
-					
-					if (data == 1) {
-						// 1 : 아이디가 중복되는 문구
-						alert("메일이 중복됩니다.");
-						$('#check_hidden1').val("no");
-					} else {
-						// 0 : 아이디가 안됨.
-						alert("메일을 사용가능합니다.");
-						$('#check_hidden1').val("yes");
-					}
-				}, 
-				error : function() {
-						console.log("실패");
-				}
-			});
-		}
-
 		function idCheck() {
 			var user_id = $('#id').val();
 			
@@ -126,24 +86,12 @@
             <input type="password" name="password" placeholder="비밀번호" required>
             <input type="password" name="checkPassword" placeholder="비밀번호 확인" required>
             <input type="text" name="mail" id="mail" placeholder="이메일" required>
-            <input id="input_userMail_check" type="button" value="이메일중복확인" onclick="mailCheck()">
-            <input id="check_hidden1" type="hidden"	value="no" />
             <input type="submit" value="회원가입">
           </form> 
           <span class="login__divider">
             or
           </span>
           <a href="login" class="login__small-link">뒤로가기</a>
-        </div>
-        <div class="login__box">
-          <span class="login__text">
-            다른 궁금한 점이 있으신가요? <br />
-          </span>
-          &nbsp;
-          <a class="login__blue-link" href="#">고객센터</a>
-        </div>
-        <div class="login__t-box">
-
         </div>
       </div>
 

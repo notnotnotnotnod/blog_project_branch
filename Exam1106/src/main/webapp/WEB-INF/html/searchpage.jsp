@@ -73,7 +73,7 @@
         #section {
             margin-top: 32px;
             border-radius: 3px;
-            border: 1px solid black;
+            border: 1px solid rgb(210, 210, 210);
             width: 577px;
 			
 
@@ -212,14 +212,14 @@
             
                 <!-- class="COOzN MnWb5 YT6rB " -->
                 <aside id="aside">
-                    <div class="photo__header" style="border: 1px solid black; height: 1.5cm;">
+                    <div class="photo__header" style="border: 1px solid rgb(210, 210, 210); height: 1.5cm;">
                     <img src="http://placehold.it/150x150" alt="프로필사진">
                     <span class="photo__username aside" name = "id"><%= session.getAttribute("sessionID") %></span>
                     <a class="btn btn-primary" href="write" role="button" style="float: right;">글쓰기</a>
                     <a class="btn btn-primary" href="LogoutAction" role="button" style="float: right;">로그아웃</a>
                     </div>
                     <br>
-                    <div style="border: 1px solid black; height: 5cm;">
+                    <div style="border: 1px solid rgb(210, 210, 210); height: 5cm;">
                     <%for(int i=0;i<asidehashList.size();i++){
                     	String hashtag=asidehashList.get(i).getTagname();
                         String tag="";

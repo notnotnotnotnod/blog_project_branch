@@ -19,11 +19,24 @@
    		select * from blog_board where bname = #{bname}
    	</select>
    	
+   	<select id="NameSearchList" resultType="com.study.springboot.dto.BoardDto">
+   		select * from blog_board where bname = #{bname}
+   	</select>
+   	
+   	<select id="BoardSearchList" resultType="com.study.springboot.dto.BoardDto">
+   		select * from blog_board where bcontent = #{bcontent}
+   	</select>
+   	
+   	<select id="BnoSearchList" resultType="com.study.springboot.dto.BoardDto">
+   		select * from blog_board where bno = #{bno}
+   	</select>
+   	
    	<select id="contentView" resultType="com.study.springboot.dto.BoardDto"> 
 		select * from blog_board where bname=#{param1}
    	</select>
+   	
    	<update id="modify" parameterType="com.study.springboot.dto.BoardDto" >
-        update blog_board set bname=#{param2}, btitle=#{param3}, bcontent=#{param4} where bid=#{param1}
+        update blog_board set  bcontent=#{bcontent} where bno=#{bno}
    	</update>
    	
    	<delete id="boarddelete">
