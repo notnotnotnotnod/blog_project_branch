@@ -9,11 +9,12 @@
 <%@ page import="com.study.springboot.dto.FileDto" %>
 <%@ page import="com.study.springboot.dto.ReplyDto" %>
 
-<% ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist1");
-	ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist1");
-	ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist1");
-	ArrayList<ReplyDto> listBoard = (ArrayList<ReplyDto>)session.getAttribute("listBoard1");
-	ArrayList<BoardDto> list = (ArrayList<BoardDto>)session.getAttribute("list1");
+<% ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist");
+	ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist");
+	ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
+	ArrayList<ReplyDto> listBoard = (ArrayList<ReplyDto>)session.getAttribute("listBoard");
+	ArrayList<BoardDto> list = (ArrayList<BoardDto>)session.getAttribute("list");
+	
 
 %>
 
@@ -172,8 +173,13 @@
                     	<li class="photo__comment"><span style="font-size: 20px;"><%out.print(list.get(i).getBcontent()); %></span>
                     	<li class="photo__comment">
                         <%for(int k=0;k<hashList.size();k++){
+                        	String hashtag=hashList.get(k).getTagname();
+                        	String tag="";
+                        	for(int j=1;j<hashtag.length();j++){
+                        		tag += hashtag.charAt(j);
+                        	}
                       		if(list.get(i).getBno()==hashList.get(k).getBno()){%>
-                        <a href="#"><span><%out.print(hashList.get(k).getTagname());%></span></a><%}}%></li>
+                        <a href="hashtagAction?search=<%=tag%>"><span><%out.print(hashList.get(k).getTagname());%></span></a><%}}%></li>
                          <li class="photo__comment">
 						<!-- 댓글 보기 / 쓰기 -->
                          	<form action="coment" method=post>
@@ -215,10 +221,15 @@
                     <br>
                     <div style="border: 1px solid black; height: 5cm;">
                     <%for(int i=0;i<asidehashList.size();i++){
+                    	String hashtag=asidehashList.get(i).getTagname();
+                        String tag="";
+                    	for(int k=1;k<hashtag.length();k++){
+                    		tag += hashtag.charAt(k);
+                    	}
                     	if(i==(asidehashList.size()-1)){ %>
-                        <a href="#"><span><%out.print(asidehashList.get(i).getTagname()); %></span></a>
+                        <a href="hashtagAction?search=<%=tag%>"><span><%out.print(asidehashList.get(i).getTagname()); %></span></a>
                         <%}else{%>
-                        <a href="#"><span><%out.print(asidehashList.get(i).getTagname()); %></span></a>,
+                        <a href="hashtagAction?search=<%=tag%>"><span><%out.print(asidehashList.get(i).getTagname()); %></span></a>,
                      <%}}%>
                         
                         

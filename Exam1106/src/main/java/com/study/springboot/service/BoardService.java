@@ -27,7 +27,25 @@ public class BoardService implements IBoardService {
 		ArrayList<BoardDto> deletelist = boardDao.deletelist(name);
 		return deletelist;
 	}
-
+	
+	@Override
+	public ArrayList<BoardDto> NameSearchList(String bname){
+		ArrayList<BoardDto> list = boardDao.NameSearchList(bname);
+		return list;
+	}
+	
+	@Override
+	public ArrayList<BoardDto> BoardSearchList(String bcontent){
+		ArrayList<BoardDto> list = boardDao.BoardSearchList(bcontent);
+		return list;
+	}
+	
+	@Override
+	public ArrayList<BoardDto> BnoSearchList(int bno){
+		ArrayList<BoardDto> list = boardDao.BnoSearchList(bno);
+		return list;
+	}
+	
 	@Override
 	public ArrayList<BoardDto> list() {
 		ArrayList<BoardDto> list = boardDao.list();

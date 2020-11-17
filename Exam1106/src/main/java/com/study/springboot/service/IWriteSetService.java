@@ -10,5 +10,6 @@ public interface IWriteSetService {
 	public int hashtag(int bno, String tagname);
 	public ArrayList<FileDto> hashtagList(); 
 	public ArrayList<FileDto> aside_hashtagList();
+	public ArrayList<FileDto> TagSearchListDao(String tagname);
 }
 

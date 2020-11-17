@@ -57,6 +57,32 @@ public class MyController {
 	public String searchpage() throws Exception{
 		return "searchpage";
 	}
+	@RequestMapping("/hashtagAction")
+	public String hashtagAction(HttpServletRequest req, Model model) throws Exception{
+		HttpSession session = req.getSession();
+		String search = "#"+req.getParameter("search");
+		
+		System.out.println("search값 :"+search);
+		ArrayList<FileDto> hashlist = Write_service.hashtagList();
+		ArrayList<FileDto> asidehashlist = Write_service.aside_hashtagList();
+		ArrayList<FileDto> filelist = Write_service.fileList();
+		ArrayList<ReplyDto> rlist = reply_service.replyList();
+		ArrayList<FileDto> searchlist = Write_service.TagSearchListDao(search);	
+		ArrayList<BoardDto> list = new ArrayList<BoardDto>();
+		for(int i=0;i<searchlist.size();i++) {
+			list.addAll(board_service.BnoSearchList(searchlist.get(i).getBno()));
+		}
+		
+		session.setAttribute("list", list);				
+		session.setAttribute("filelist", filelist);
+		session.setAttribute("asidehashlist", asidehashlist);
+		session.setAttribute("hashlist", hashlist);
+		session.setAttribute("listBoard", rlist);
+		
+		model.addAttribute("msg",search+"검색");
+		model.addAttribute("url","/searchpage");
+		return "redirect";
+	}
 	
 	@RequestMapping("/searchAction")
 	public String searchAction(HttpServletRequest req, Model model) throws Exception{
@@ -64,30 +90,23 @@ public class MyController {
 		
 		String search = req.getParameter("search");
 		System.out.println("search값 :"+search);
-		ArrayList<FileDto> hashlist1 = Write_service.hashtagList();
-		ArrayList<FileDto> asidehashlist1 = Write_service.aside_hashtagList();
-		ArrayList<FileDto> filelist1 = Write_service.fileList();
-		ArrayList<ReplyDto> rlist1 = reply_service.replyList();
-		ArrayList<BoardDto> searchlist1 = board_service.searchlist(search);		
-		if(searchlist1.size()==0) {
-			ArrayList<BoardDto> searchlist2 = board_service.searchlist2(search);
-			System.out.println("searchlist2 :"+searchlist2.size());
-			session.setAttribute("list1", searchlist2);
+		ArrayList<FileDto> hashlist = Write_service.hashtagList();
+		ArrayList<FileDto> asidehashlist = Write_service.aside_hashtagList();
+		ArrayList<FileDto> filelist = Write_service.fileList();
+		ArrayList<ReplyDto> rlist = reply_service.replyList();
+		ArrayList<BoardDto> searchlist = board_service.NameSearchList(search);		
+		if(searchlist.size()==0) {
+			ArrayList<BoardDto> searchlist2 = board_service.BoardSearchList(search);
+			session.setAttribute("list", searchlist2);
 		}else{
-			session.setAttribute("list1", searchlist1);
-			System.out.println("searchlist: "+searchlist1.size());
+			session.setAttribute("list", searchlist);
+			System.out.println("searchlist: "+searchlist.size());
 			}
-			/*
-			 * System.out.println("hashlist : "+hashlist1.size());
-			 * System.out.println("asidehashlist: "+asidehashlist1.size());
-			 * System.out.println("filelist : "+filelist1.size());
-			 * System.out.println("rlist : "+filelist1.size());
-			 */
 						
-		session.setAttribute("filelist1", filelist1);
-		session.setAttribute("asidehashlist1", asidehashlist1);
-		session.setAttribute("hashlist1", hashlist1);
-		session.setAttribute("listBoard1", rlist1);
+		session.setAttribute("filelist", filelist);
+		session.setAttribute("asidehashlist", asidehashlist);
+		session.setAttribute("hashlist", hashlist);
+		session.setAttribute("listBoard", rlist);
 		
 		model.addAttribute("msg",search+"검색");
 		model.addAttribute("url","/searchpage");

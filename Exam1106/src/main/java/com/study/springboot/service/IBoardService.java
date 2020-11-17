@@ -14,5 +14,8 @@ public interface IBoardService {
     public int reply(String bid, String bname, String bcontent); //댓글작성
     public int upHit(String bid); //조회수 올리기
     public ArrayList<BoardDto> deletelist(String bname);
+    public ArrayList<BoardDto> NameSearchList(String bname);
+    public ArrayList<BoardDto> BoardSearchList(String bcontent);
+    public ArrayList<BoardDto> BnoSearchList(int bno);
     public int boarddelete(String bno);
 }

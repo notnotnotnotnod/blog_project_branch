@@ -21,6 +21,12 @@ public class WriteSetService implements IWriteSetService{
 	}
 	
 	@Override
+	public ArrayList<FileDto> TagSearchListDao(String tagname){
+		ArrayList<FileDto> list = BoardSetDao.TagSearchListDao(tagname);
+		return list;
+	}
+	
+	@Override
 	public ArrayList<FileDto> fileList() {
 		ArrayList<FileDto> list = BoardSetDao.fileListDao();
 		return list;

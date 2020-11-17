@@ -20,4 +20,7 @@ public interface IBoardDao {
     public int bnodelete(String bcontent);
     public ArrayList<BoardDto> deletelist(@Param("bname") String bname); //글삭제리스트
     public int boarddelete(@Param("bno") String bno); //게시글 삭제.
+    public ArrayList<BoardDto> NameSearchList(@Param("bname") String bname);
+    public ArrayList<BoardDto> BoardSearchList(@Param("bcontent") String bcontent);
+    public ArrayList<BoardDto> BnoSearchList(@Param("bno") int bno);
 }

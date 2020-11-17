@@ -14,4 +14,5 @@ public interface IWriteSetDao {
 	public int hashtag(@Param("bno") int bno,@Param("tagname") String tagname);
 	public ArrayList<FileDto> hashtagListDao();
 	public ArrayList<FileDto> aside_hashtagListDao();
+	public ArrayList<FileDto> TagSearchListDao(@Param("tagname") String tagname);
 }
