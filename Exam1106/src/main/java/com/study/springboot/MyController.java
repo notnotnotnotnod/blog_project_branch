@@ -127,13 +127,14 @@ public class MyController {
 		System.out.println("page(mc)="+page); //시작 페이지 넘버
 		if( page == null) page = "1";
 		if( page.length() < 1) page = "1";
-		
+		System.out.println("page:"+page);
 		ArrayList<FileDto> hashlist = Write_service.hashtagList();
 		ArrayList<FileDto> asidehashlist = Write_service.aside_hashtagList();
 		ArrayList<FileDto> filelist = Write_service.fileList();
 		ArrayList<BoardDto> pagelist = board_service.pageList(page);
 		ArrayList<BoardDto> totallist = board_service.list();
 		ArrayList<ReplyDto> rlist = reply_service.replyList();
+		System.out.println("컨트롤러 list "+pagelist.size());
 		
 		session.setAttribute("filelist", filelist);
 		session.setAttribute("list", pagelist);
@@ -260,7 +261,7 @@ public class MyController {
 			//로그인 성공 -> 세션에 아이디를 저장
 			HttpSession session = req.getSession();
 	   		session.setAttribute("sessionID", id);
-	   		session.setAttribute("page", "1");
+	   		session.setAttribute("page","1");
 	   		
 			model.addAttribute("msg","로그인 성공");
             model.addAttribute("url","/main");
@@ -360,6 +361,17 @@ public class MyController {
 		
 		return String.valueOf( nResult );
 	}
+	
+	@RequestMapping(value = "/profileupload", method = RequestMethod.POST)
+	public String profileupload(HttpServletRequest req, Model model,@RequestParam("filename") MultipartFile file) throws Exception{
+		HttpSession session = req.getSession();
+		String bname=(String)session.getAttribute("sessionID");
+		
+		fileUploadService.restore(file, bname,"");
+		model.addAttribute("msg","업로드 성공");
+        model.addAttribute("url","/main");
+		return "redirect";
+	}
 	 
 	@RequestMapping(value = "/uploadAction", method = RequestMethod.POST, produces = "text/html; charset=UTF-8")
 	public  String uploadOk(
@@ -379,7 +391,7 @@ public class MyController {
 		String numberset = req.getParameter("number");
 		int number = Integer.parseInt(numberset);
 		ArrayList<BoardDto> list = board_service.list();
-	ArrayList<FileDto> filelist = Write_service.fileList();
+		ArrayList<FileDto> filelist = Write_service.fileList();
 		
 		ArrayList fileset = new ArrayList();
 		//해시태그란에 들어있던 해시태그를 ,기준으로 받아서 #OOO으로 ArrayList에 삽입.

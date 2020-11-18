@@ -33,33 +33,41 @@
 	</script>
 </head>
 <body>
-  <nav class="navigation">
-    
-      <img src="images/logo.png" />
-    
-    <input type="text" placeholder="Search">
-    <div class="navigation__links">
-      <a href="main" class="navigation__link">
-          <i class="fa fa-compass"></i>
-      </a>
-      <a href="#" class="navigation__link">
-          <i class="fa fa-heart-o"></i>
-      </a>
-      <a href="mypage" class="navigation__link">
-          <i class="fa fa-user-o"></i>
-      </a>
-    </div>
-  </nav>
+  <header>
+        <nav class="navigation fixed-top">
+              <img src="images/logo.png" />
+            <form action="searchAction" method="post">
+            <input type="text" name="search" placeholder="Search">
+            <button type="submit" class="btn btn-outline-secondary">검색</button>
+            </form>
+            <div class="navigation__links">
+              <a href="main" class="navigation__link">
+                  <i class="fa fa-compass"></i>
+              </a>
+              <a href="#" class="navigation__link">
+                  <i class="fa fa-heart-o"></i>
+              </a>
+              <a href="mypage" class="navigation__link">
+                  <i class="fa fa-user-o"></i>
+              </a>
+            </div>
+          </nav>
+    </header>
       
   <main id="edit-profile">
     <div class="edit-profile__container u-default-box">
       
       <header class="edit-profile__header">
         <div class="fucker-container">
-          <img src="images/avatar.jpg" />
+          <img src="upload/<%out.print(member.getId()); %>.jpg" onerror="this.src='http://placehold.it/150x150'" />      
         </div>
+        
         <!-- master comments -->
-        <h1 class="edit-profile__username"><%=member.getName() %>
+          <form action="profileupload" method="post" enctype="multipart/form-data">
+          <h1 class="edit-profile__username"><%=member.getName() %>
+          <button type="submit" >프로필사진 변경</button>
+          <input type="file" name="filename" >
+          </form>
           <form action="dropout">
           <input type="submit" value="회원탈퇴" style="float: right;">
           </form>

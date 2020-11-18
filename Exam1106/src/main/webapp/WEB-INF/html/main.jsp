@@ -18,15 +18,7 @@
    	   int num_page_size = 5; //한 화면당 보여줄 페이지 수
    	   int totalpage = (int)Math.ceil(totallist.size()/(double)num_page_size);
    	   
-   	   String pageNumber = (String)session.getAttribute("page");
-	   System.out.print("pageNumber="+pageNumber);
-	   
-	   int prevPage = Integer.parseInt(pageNumber);
-	   int nextPage = totalpage;
-	   
-	   if(prevPage < 6){
-		   
-	   }
+
     %>
 <!DOCTYPE html>
 <html>
@@ -53,6 +45,11 @@
     <title>메인페이지</title>
         
     <style>
+    	.photo__header img {
+  		width: 40px;
+  		height: 40px;
+		}
+    
         @media screen and (max-width: 1460px){
             aside{
               display: none;
@@ -94,7 +91,7 @@
         #section {
             margin-top: 32px;
             border-radius: 3px;
-            border: 1px solid black;
+            border: 1px solid rgb(210, 210, 210);
             width: 577px;
 			
 
@@ -187,8 +184,8 @@
         <div id="section">
             <div>
                 <header class="photo__header">
-                    <img src="http://placehold.it/150x150" alt="프로필사진">
-                    <span class="photo__username" style="font-size: 20px;" name="username"><%out.print(board.get(i).getBname()); %></span>
+                    <img src="upload/<%out.print(board.get(i).getBname()); %>.jpg" onerror="this.src='http://placehold.it/150x150'">
+                    <span class="photo__username" style="font-size: 20px; text-align: center;" name="username"><%out.print(board.get(i).getBname()); %></span>                 
                 </header>
             </div>
             <br>
@@ -241,7 +238,7 @@
                     </div>
 
                     <ul class="photo__comments">
-                        <!-- 메인 글 내용 -->
+                        <!-- 메인 글 내용. -->
                     	<li class="photo__comment"><span style="font-size: 20px;"><%out.print(board.get(i).getBcontent()); %></span>
                     	<li class="photo__comment">
                         <%for(int k=0;k<hashList.size();k++){
@@ -281,10 +278,6 @@
                      </ul>
                     <span class="photo__date"><%out.print(board.get(i).getBdate()); %></span>
                     <hr>
-                    <div class="photo__add-comment-container">
-                        <textarea placeholder="댓글을 작성하세요.."></textarea>
-                        <i class="fa fa-ellipsis-h"></i>
-                    </div>
                 </div>
             </div>
         </div>
@@ -292,14 +285,15 @@
             
                 <!-- class="COOzN MnWb5 YT6rB " -->
                 <aside id="aside">
-                    <div class="photo__header" style="border: 1px solid black; height: 1.5cm;">
-                    <img src="http://placehold.it/150x150" alt="프로필사진">
+                    <div class="photo__header" style="border: 1px solid rgb(210, 210, 210); height: 1.5cm;">
+                    
+                    <img src="upload/<%out.print(session.getAttribute("sessionID")); %>.jpg" onerror="this.src='http://placehold.it/150x150'" >
                     <span class="photo__username aside" name = "id"><%= session.getAttribute("sessionID") %></span>
                     <a class="btn btn-primary" href="write" role="button" style="float: right;">글쓰기</a>
                     <a class="btn btn-primary" href="LogoutAction" role="button" style="float: right;">로그아웃</a>
                     </div>
                     <br>
-                    <div style="border: 1px solid black; height: 5cm;">
+                    <div style="border: 1px solid rgb(210, 210, 210); height: 5cm;">
                     <%for(int i=0;i<asidehashList.size();i++){
                     	String hashtag=asidehashList.get(i).getTagname();
                         String tag="";
@@ -321,7 +315,7 @@
                 <nav id="Main" aria-label="Page navigation example" style="width: 100%;">
                     <ul class="pagination">
                         <li class="page-item">
-                            <a class="page-link" href="main?page=<%= prevPage %>" aria-label="Previous">
+                            <a class="page-link" href="#" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
@@ -329,7 +323,7 @@
 		                        <li class="page-item"><a class="page-link" href="main?page=<%=i%>"><%=i%></a></li>
 	                        <%}%>
                         <li class="page-item">
-                            <a class="page-link" href="main?page=<%= nextPage %>" aria-label="Next">
+                            <a class="page-link" href="#" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>

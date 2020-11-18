@@ -57,8 +57,19 @@ public class BoardService implements IBoardService {
 		
 		int num_page_no = Integer.parseInt(page); //page번호
 		int num_page_size = 5; //한 화면당 보여줄 페이지 수
-		int startRowNum = (num_page_no -1) * num_page_size + 1; // 1, 6, 11페이지 시작 줄번호
-		int endRowNum = (num_page_no * num_page_size); //5, 10, 15페이지 끝 줄번호
+		int endRowNum = 0;
+		int startRowNum = 0;
+		ArrayList<BoardDto> boardlist = boardDao.list();
+		//page번호가 1이면 1~5,2이면 6~10,3이면 11~15,4이면 16~20		
+		int i=num_page_no*num_page_size;
+		if(i>boardlist.size()) {
+			endRowNum = boardlist.get(i-5).getBno();
+			startRowNum = boardlist.get(boardlist.size()-1).getBno();
+		}else {
+			 endRowNum = boardlist.get(i-5).getBno();
+			 startRowNum = boardlist.get(i-1).getBno();
+		}
+		
 		
 		System.out.println("num_page_no"+num_page_no);
 		System.out.println("num_page_size"+num_page_size);

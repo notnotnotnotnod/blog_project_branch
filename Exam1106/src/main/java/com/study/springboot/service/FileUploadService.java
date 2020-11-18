@@ -49,8 +49,11 @@ public class FileUploadService {
 
 
 			// 서버에서 저장 할 파일 이름
+			if(number=="") {
+				filename = name+extName;
+			}else {
 			filename = name+"_"+number+"_"+genSaveFileName(extName);
-
+			}
 			writeFile(multipartFile, filename);
 
 		} catch (IOException e) {
@@ -93,4 +96,5 @@ public class FileUploadService {
 
 		return;
 	}
+
 }
