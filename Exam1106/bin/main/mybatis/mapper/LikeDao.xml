@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.study.springboot.dao.ILikeDao"> 
+
+	<!-- 동일 게시글 추천 여부 검색 -->
+	<select id="likeCheckDao" parameterType="com.study.springboot.dto.LikeDto" resultType="int">
+		select count(*) from like_rec where bno = #{param1} and id = #{param2}
+	</select>
+	
+	<!-- 게시글 추천 -->
+	<insert id="likeUpdateDao" parameterType="com.study.springboot.dto.LikeDto">
+		insert into like_rec (bno, id) 
+			values(#{param1}, #{param2})
+	</insert>
+	
+	<!-- 게시글 추천 취소 -->
+	<delete id="likeDeleteDao" parameterType="com.study.springboot.dto.LikeDto">
+		delete from like_rec where bno = #{param1} and id = #{param2}
+	</delete>
+	
+	<!-- 게시글 추천수 -->
+	<select id="likeCountDao" parameterType="com.study.springboot.dto.LikeDto" resultType="int">
+		select count(*) from like_rec where bno = #{param1}
+	</select>
+
+	<select id="likeList" resultType="com.study.springboot.dto.LikeDto"> 
+		select * from like_rec order by bno desc
+   	</select> 
+   	
+</mapper>
+
