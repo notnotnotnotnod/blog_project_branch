@@ -32,6 +32,11 @@
     <title>검색페이지</title>
         
     <style>
+    	.photo__header img {
+  		width: 40px;
+  		height: 40px;
+		}
+    	
         @media screen and (max-width: 1460px){
             aside{
               display: none;
@@ -115,7 +120,7 @@
         <div id="section">
             <div>
                 <header class="photo__header">
-                    <img src="http://placehold.it/150x150" alt="프로필사진">
+                    <img src="upload/<%out.print(list.get(i).getBname()); %>.jpg" onerror="this.src='http://placehold.it/150x150'">
                     <span class="photo__username" style="font-size: 20px;" name="username"><%out.print(list.get(i).getBname()); %></span>
                 </header>
             </div>
@@ -213,7 +218,7 @@
                 <!-- class="COOzN MnWb5 YT6rB " -->
                 <aside id="aside">
                     <div class="photo__header" style="border: 1px solid rgb(210, 210, 210); height: 1.5cm;">
-                    <img src="http://placehold.it/150x150" alt="프로필사진">
+                    <img src="upload/<%out.print(session.getAttribute("sessionID")); %>.jpg" onerror="this.src='http://placehold.it/150x150'" >
                     <span class="photo__username aside" name = "id"><%= session.getAttribute("sessionID") %></span>
                     <a class="btn btn-primary" href="write" role="button" style="float: right;">글쓰기</a>
                     <a class="btn btn-primary" href="LogoutAction" role="button" style="float: right;">로그아웃</a>

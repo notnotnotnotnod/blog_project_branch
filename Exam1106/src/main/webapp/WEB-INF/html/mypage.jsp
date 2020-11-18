@@ -59,10 +59,15 @@
       
       <header class="edit-profile__header">
         <div class="fucker-container">
-          <img src="images/avatar.jpg" />
+          <img src="upload/<%out.print(member.getId()); %>.jpg" onerror="this.src='http://placehold.it/150x150'" />      
         </div>
+        
         <!-- master comments -->
-        <h1 class="edit-profile__username"><%=member.getName() %>
+          <form action="profileupload" method="post" enctype="multipart/form-data">
+          <h1 class="edit-profile__username"><%=member.getName() %>
+          <button type="submit" >프로필사진 변경</button>
+          <input type="file" name="filename" >
+          </form>
           <form action="dropout">
           <input type="submit" value="회원탈퇴" style="float: right;">
           </form>
