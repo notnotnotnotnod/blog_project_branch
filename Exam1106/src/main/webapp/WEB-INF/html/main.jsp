@@ -9,16 +9,15 @@
     <%@ page import="com.study.springboot.dto.FileDto" %>
     <%@ page import="com.study.springboot.dto.ReplyDto" %>
 
-    <% ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist"); 
-   	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");
-   	   ArrayList<BoardDto> totallist =(ArrayList<BoardDto>)session.getAttribute("totallist");
-   	   ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
-   	   ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist");
-   	   ArrayList<ReplyDto> rlist = (ArrayList<ReplyDto>)session.getAttribute("listBoard");
-   	   int num_page_size = 5; //한 화면당 보여줄 페이지 수
-   	   int totalpage = (int)Math.ceil(totallist.size()/(double)num_page_size);
-   	   
-
+    <%
+    	ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist"); 
+       	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");
+       	   ArrayList<BoardDto> totallist =(ArrayList<BoardDto>)session.getAttribute("totallist");
+       	   ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
+       	   ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist");
+       	   ArrayList<ReplyDto> rlist = (ArrayList<ReplyDto>)session.getAttribute("listBoard");
+       	   int num_page_size = 5; //한 화면당 보여줄 페이지 수
+       	   int totalpage = (int)Math.ceil(totallist.size()/(double) num_page_size);
     %>
 <!DOCTYPE html>
 <html>
@@ -104,36 +103,34 @@
     </style>
     
     <script>
-	    $(function() {
-	    	console.log("onload");
-			// 추천버튼 클릭시(추천 추가 또는 추천 제거)
-			$('.like_update').click(function(){
-				console.log("likeupdateclick");
-				var bno = $('#bno_value').val();
-				var id = $('#id_value').val();
-				console.log( bno );
-				console.log( id );
-				
-				$.ajax({
-					url : '${pageContext.request.contextPath}/likeUpdate',
-					type: 'post',
-					data: {
-	                    bno: bno,
-	                    id: id
-	                },
-					success : function(data) {
-						console.log("성공");
-						likeCount();
-					}, 
-					error : function() {
-						console.log("실패");
-					}
-				});	
-			});
-	    });
+	    function likeup(i,k){
+	    	console.log("likeupdateclick");
+			var bno = i;
+			var id = k;
+			console.log( bno );
+			console.log( id );
+			console.log(i);
+			
+			$.ajax({
+				url : '${pageContext.request.contextPath}/likeUpdate',
+				type: 'post',
+				data: {
+                    bno: bno,
+                    id: id
+                },
+				success : function(data) {
+					console.log("성공");
+					likeCount(bno);
+				}, 
+				error : function() {
+					console.log("실패");
+				}
+			});	
+
+		    }
 			// 게시글 추천수
-		    function likeCount() {
-		    	var bno = $('#bno_value').val();
+		    function likeCount(i) {
+		    	var bno =i;
 		    	console.log(bno);
 				$.ajax({
 					url: "${pageContext.request.contextPath}/likeCount",
@@ -143,11 +140,10 @@
 	                },
 	                success: function(count) {
 	                	console.log("성공");
-	                	$(".like_count").html("like:" + count);
+	                	$(".like_count"+i).html("like:" + count);
 	                },	                
 				})
 		    };
-		   // likeCount();  // 처음 시작했을 때 실행되도록 해당 함수 호출 
 
     
 
@@ -175,16 +171,16 @@
             </div>
           </nav>
     </header>
+    
+    
     <main id="feed">
     <% for(int i=0;i<board.size();i++) {
     	int sum=0;
-    	int gap=0;
-   		
-    %>
+    	int gap=0;  %>
         <div id="section">
             <div>
-                <header class="photo__header">
-                    <img src="upload/<%out.print(board.get(i).getBname()); %>.jpg" onerror="this.src='http://placehold.it/150x150'">
+                <header class="photo__header" >
+                    <img src="upload/<%out.print(board.get(i).getBname()); %>.jpg" onerror="this.src='http://placehold.it/150x150'" >
                     <span class="photo__username" style="font-size: 20px; text-align: center;" name="username"><%out.print(board.get(i).getBname()); %></span>                 
                 </header>
             </div>
@@ -258,12 +254,16 @@
                          </li>
                          
                         <!-- 추천 기능(좋아요) -->
-                    		<form>
+                 		    <div>
+                    		  <script type="text/javascript">
+							  likeCount(<%=board.get(i).getBno()%>)
+							  </script>
 		                    	<input id="bno_value" type="hidden" value="<%=board.get(i).getBno()%>" >
+		                    	<% System.out.println(board.get(i).getBno()); %>
 						   		<input id="id_value" type="hidden" value=" <%=board.get(i).getBname()%>" >
-		                        <input type="button" class="like_update" value="좋아요"> &nbsp;
-								<span class="like_count">like:</span>
-		                    </form>
+		                        <input type="button" class="like_update" value="좋아요" onclick="likeup(<%=board.get(i).getBno()%>,'<%= session.getAttribute("sessionID") %>')"> &nbsp;
+								<span class="like_count<%=board.get(i).getBno()%>">like:</span>
+		                  	</div>
                          <hr>
                      </ul>
                      
