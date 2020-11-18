@@ -15,9 +15,18 @@
    	   ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
    	   ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist");
    	   ArrayList<ReplyDto> rlist = (ArrayList<ReplyDto>)session.getAttribute("listBoard");
-   	   
    	   int num_page_size = 5; //한 화면당 보여줄 페이지 수
    	   int totalpage = (int)Math.ceil(totallist.size()/(double)num_page_size);
+   	   
+   	   String pageNumber = (String)session.getAttribute("page");
+	   System.out.print("pageNumber="+pageNumber);
+	   
+	   int prevPage = Integer.parseInt(pageNumber);
+	   int nextPage = totalpage;
+	   
+	   if(prevPage < 6){
+		   
+	   }
     %>
 <!DOCTYPE html>
 <html>
@@ -30,6 +39,17 @@
     <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/modal.css">
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js" 
+		integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" 
+		crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+        
     <title>메인페이지</title>
         
     <style>
@@ -85,6 +105,56 @@
             width: 50%;
         }
     </style>
+    
+    <script>
+	    $(function() {
+	    	console.log("onload");
+			// 추천버튼 클릭시(추천 추가 또는 추천 제거)
+			$('.like_update').click(function(){
+				console.log("likeupdateclick");
+				var bno = $('#bno_value').val();
+				var id = $('#id_value').val();
+				console.log( bno );
+				console.log( id );
+				
+				$.ajax({
+					url : '${pageContext.request.contextPath}/likeUpdate',
+					type: 'post',
+					data: {
+	                    bno: bno,
+	                    id: id
+	                },
+					success : function(data) {
+						console.log("성공");
+						likeCount();
+					}, 
+					error : function() {
+						console.log("실패");
+					}
+				});	
+			});
+	    });
+			// 게시글 추천수
+		    function likeCount() {
+		    	var bno = $('#bno_value').val();
+		    	console.log(bno);
+				$.ajax({
+					url: "${pageContext.request.contextPath}/likeCount",
+	                type: "POST",
+	                data: {
+	                    bno: bno
+	                },
+	                success: function(count) {
+	                	console.log("성공");
+	                	$(".like_count").html("like:" + count);
+	                },	                
+				})
+		    };
+		   // likeCount();  // 처음 시작했을 때 실행되도록 해당 함수 호출 
+
+    
+
+    </script>
 </head>
 
 <body>
@@ -189,17 +259,25 @@
 	                         	<button class="btn btn-outline-secondary" type="submit" id="button-addon2">댓글 더보기</button>
 	                        </form>
                          </li>
-                        <hr>
-                    </ul>
-
+                         
+                        <!-- 추천 기능(좋아요) -->
+                    		<form>
+		                    	<input id="bno_value" type="hidden" value="<%=board.get(i).getBno()%>" >
+						   		<input id="id_value" type="hidden" value=" <%=board.get(i).getBname()%>" >
+		                        <input type="button" class="like_update" value="좋아요"> &nbsp;
+								<span class="like_count">like:</span>
+		                    </form>
+                         <hr>
+                     </ul>
+                     
 				  		<% for(int r=0; r<rlist.size(); r++) { 
 				  			  if(board.get(i).getBno()==rlist.get(r).getBno()){%>
-				  	 <ul class="photo__comments"> 
+				  	 <ul class="photo__comments">
                          <li class="photo__comment">
                              <span class="photo__comment-author"><b><%out.print( rlist.get(r).getRname()); %></b></span>
                              &nbsp <%out.print(rlist.get(r).getRcontent());%>
                          </li>
-                         <% }} %>
+                         <% }}%>
                      </ul>
                     <span class="photo__date"><%out.print(board.get(i).getBdate()); %></span>
                     <hr>
@@ -243,7 +321,7 @@
                 <nav id="Main" aria-label="Page navigation example" style="width: 100%;">
                     <ul class="pagination">
                         <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
+                            <a class="page-link" href="main?page=<%= prevPage %>" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
@@ -251,7 +329,7 @@
 		                        <li class="page-item"><a class="page-link" href="main?page=<%=i%>"><%=i%></a></li>
 	                        <%}%>
                         <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
+                            <a class="page-link" href="main?page=<%= nextPage %>" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -277,15 +355,6 @@
             </nav>
             <span class="footer__copyright">© 2020</span>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-        crossorigin="anonymous"></script>
 
 </body>
 
