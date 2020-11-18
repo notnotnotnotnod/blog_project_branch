@@ -21,6 +21,7 @@ import com.study.springboot.dto.MemberDto;
 import com.study.springboot.dto.ReplyDto;
 import com.study.springboot.service.FileUploadService;
 import com.study.springboot.service.IBoardService;
+import com.study.springboot.service.ILikeService;
 import com.study.springboot.service.IMemberService;
 import com.study.springboot.service.IReplyService;
 import com.study.springboot.service.IWriteSetService;
@@ -42,6 +43,9 @@ public class MyController {
 	
 	@Autowired
 	FileUploadService fileUploadService;
+	
+	@Autowired
+	ILikeService like_service;
 
 	@RequestMapping("/")
 	public String root() throws Exception {
@@ -656,4 +660,51 @@ public class MyController {
 		}	
 	}
 	
+		@RequestMapping(value="/likeUpdate", method=RequestMethod.POST, produces = "text/html; charset=UTF-8")
+		public String likeUpdate(HttpServletRequest req, Model model) throws Exception {
+			req.setCharacterEncoding("utf-8");
+			HttpSession session = req.getSession();
+			
+			String bno = req.getParameter("bno");
+			String id = req.getParameter("id");
+			
+			System.out.println("bno(mc)(likeupdate) = " + bno);
+			System.out.println("id(mc)(likeupdate) = " + id);
+			
+//			Map<String, Object> m = new HashMap<>();
+//			
+//			m.put("bno", bno);
+//			m.put("id", id);
+//			
+//			System.out.println("m_bno(mc)="+m.get("bno"));
+//			System.out.println("m_bno(id)="+m.get("id"));
+			
+			int nResult = like_service.likeCheck(bno, id);
+			System.out.println("nResult="+nResult);
+			
+			if( nResult == 0 ) {
+				like_service.likeUpdate(bno, id);
+				model.addAttribute("msg","like 성공");
+				model.addAttribute("url","/main");
+				return "redirect";
+			}else {
+				like_service.likeDelete(bno, id);
+				model.addAttribute("msg","like 실패");
+				model.addAttribute("url","/main");
+				return "redirect";
+			}	
+		}
+		
+		@RequestMapping(value="/likeCount", method=RequestMethod.POST, produces = "text/html; charset=UTF-8")
+		public @ResponseBody String likeCount(HttpServletRequest req, Model model) throws Exception {
+			req.setCharacterEncoding("utf-8");
+			
+			String bno = req.getParameter("bno");
+			System.out.println("bno(mc)(likeCount)="+bno);
+			
+			int count = like_service.likeCount(bno);
+			System.out.println("count(mc)(likeCount)="+count);
+				
+				return String.valueOf( count );
+		}
 }

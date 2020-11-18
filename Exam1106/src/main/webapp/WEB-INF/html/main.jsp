@@ -9,17 +9,15 @@
     <%@ page import="com.study.springboot.dto.FileDto" %>
     <%@ page import="com.study.springboot.dto.ReplyDto" %>
 
-    <% ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist"); 
-   	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");
-   	   ArrayList<BoardDto> totallist =(ArrayList<BoardDto>)session.getAttribute("totallist");
-   	   ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
-   	   ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist");
-   	   ArrayList<ReplyDto> rlist = (ArrayList<ReplyDto>)session.getAttribute("listBoard");
-   	   
-   	   int num_page_size = 5; //한 화면당 보여줄 페이지 수
-   	   int totalpage = (int)Math.ceil(totallist.size()/(double)num_page_size);
-   	   
-   	   System.out.println("board size"+board.size());
+    <%
+    	ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist"); 
+       	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");
+       	   ArrayList<BoardDto> totallist =(ArrayList<BoardDto>)session.getAttribute("totallist");
+       	   ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
+       	   ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist");
+       	   ArrayList<ReplyDto> rlist = (ArrayList<ReplyDto>)session.getAttribute("listBoard");
+       	   int num_page_size = 5; //한 화면당 보여줄 페이지 수
+       	   int totalpage = (int)Math.ceil(totallist.size()/(double) num_page_size);
     %>
 <!DOCTYPE html>
 <html>
@@ -32,6 +30,17 @@
     <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/modal.css">
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js" 
+		integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" 
+		crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+        
     <title>메인페이지</title>
         
     <style>
@@ -92,6 +101,53 @@
             width: 50%;
         }
     </style>
+    
+    <script>
+	    function likeup(i,k){
+	    	console.log("likeupdateclick");
+			var bno = i;
+			var id = k;
+			console.log( bno );
+			console.log( id );
+			console.log(i);
+			
+			$.ajax({
+				url : '${pageContext.request.contextPath}/likeUpdate',
+				type: 'post',
+				data: {
+                    bno: bno,
+                    id: id
+                },
+				success : function(data) {
+					console.log("성공");
+					likeCount(bno);
+				}, 
+				error : function() {
+					console.log("실패");
+				}
+			});	
+
+		    }
+			// 게시글 추천수
+		    function likeCount(i) {
+		    	var bno =i;
+		    	console.log(bno);
+				$.ajax({
+					url: "${pageContext.request.contextPath}/likeCount",
+	                type: "POST",
+	                data: {
+	                    bno: bno
+	                },
+	                success: function(count) {
+	                	console.log("성공");
+	                	$(".like_count"+i).html("like:" + count);
+	                },	                
+				})
+		    };
+
+    
+
+    </script>
 </head>
 
 <body>
@@ -115,16 +171,16 @@
             </div>
           </nav>
     </header>
+    
+    
     <main id="feed">
     <% for(int i=0;i<board.size();i++) {
     	int sum=0;
-    	int gap=0;
-   		
-    %>
+    	int gap=0;  %>
         <div id="section">
             <div>
-                <header class="photo__header">
-                    <img src="upload/<%out.print(board.get(i).getBname()); %>.jpg" onerror="this.src='http://placehold.it/150x150'">
+                <header class="photo__header" >
+                    <img src="upload/<%out.print(board.get(i).getBname()); %>.jpg" onerror="this.src='http://placehold.it/150x150'" >
                     <span class="photo__username" style="font-size: 20px; text-align: center;" name="username"><%out.print(board.get(i).getBname()); %></span>                 
                 </header>
             </div>
@@ -178,7 +234,7 @@
                     </div>
 
                     <ul class="photo__comments">
-                        <!-- 메인 글 내용 -->
+                        <!-- 메인 글 내용. -->
                     	<li class="photo__comment"><span style="font-size: 20px;"><%out.print(board.get(i).getBcontent()); %></span>
                     	<li class="photo__comment">
                         <%for(int k=0;k<hashList.size();k++){
@@ -196,17 +252,29 @@
 	                         	<button class="btn btn-outline-secondary" type="submit" id="button-addon2">댓글 더보기</button>
 	                        </form>
                          </li>
-                        <hr>
-                    </ul>
-
+                         
+                        <!-- 추천 기능(좋아요) -->
+                 		    <div>
+                    		  <script type="text/javascript">
+							  likeCount(<%=board.get(i).getBno()%>)
+							  </script>
+		                    	<input id="bno_value" type="hidden" value="<%=board.get(i).getBno()%>" >
+		                    	<% System.out.println(board.get(i).getBno()); %>
+						   		<input id="id_value" type="hidden" value=" <%=board.get(i).getBname()%>" >
+		                        <input type="button" class="like_update" value="좋아요" onclick="likeup(<%=board.get(i).getBno()%>,'<%= session.getAttribute("sessionID") %>')"> &nbsp;
+								<span class="like_count<%=board.get(i).getBno()%>">like:</span>
+		                  	</div>
+                         <hr>
+                     </ul>
+                     
 				  		<% for(int r=0; r<rlist.size(); r++) { 
 				  			  if(board.get(i).getBno()==rlist.get(r).getBno()){%>
-				  	 <ul class="photo__comments"> 
+				  	 <ul class="photo__comments">
                          <li class="photo__comment">
                              <span class="photo__comment-author"><b><%out.print( rlist.get(r).getRname()); %></b></span>
                              &nbsp <%out.print(rlist.get(r).getRcontent());%>
                          </li>
-                         <% }} %>
+                         <% }}%>
                      </ul>
                     <span class="photo__date"><%out.print(board.get(i).getBdate()); %></span>
                     <hr>
@@ -281,15 +349,6 @@
             </nav>
             <span class="footer__copyright">© 2020</span>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-        crossorigin="anonymous"></script>
 
 </body>
 
