@@ -128,7 +128,26 @@ public class MyController {
 		System.out.println("page(mc)="+page); //시작 페이지 넘버
 		if( page == null) page = "1";
 		if( page.length() < 1) page = "1";
-		System.out.println("page:"+page);
+		System.out.println("page(page가 null인지 확인):"+page);
+		
+		// 페이징의 prev와 next를 위한 부분
+		int num_page_size = 5;
+		int curPage = Integer.parseInt(page);
+		
+		int curBlock = (int)Math.ceil((curPage-1)/num_page_size)+1;
+		int blockBegin = (curBlock-1) * num_page_size+1;
+		if(curBlock>1) {
+			int prev = (curBlock-2) * num_page_size+1;
+			int next = blockBegin + num_page_size;
+			req.getSession().setAttribute("prev", prev);
+			req.getSession().setAttribute("next", next);
+		}else {
+			int prev = 1;
+			int next = 6;
+			req.getSession().setAttribute("prev", prev);
+			req.getSession().setAttribute("next", next);
+		}
+		
 		ArrayList<FileDto> hashlist = Write_service.hashtagList();
 		ArrayList<FileDto> asidehashlist = Write_service.aside_hashtagList();
 		ArrayList<FileDto> filelist = Write_service.fileList();

@@ -10,14 +10,21 @@
     <%@ page import="com.study.springboot.dto.ReplyDto" %>
 
     <%
-    	ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist"); 
-       	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");
-       	   ArrayList<BoardDto> totallist =(ArrayList<BoardDto>)session.getAttribute("totallist");
-       	   ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
-       	   ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist");
-       	   ArrayList<ReplyDto> rlist = (ArrayList<ReplyDto>)session.getAttribute("listBoard");
-       	   int num_page_size = 5; //한 화면당 보여줄 페이지 수
-       	   int totalpage = (int)Math.ceil(totallist.size()/(double) num_page_size);
+       ArrayList<FileDto> fileset = (ArrayList<FileDto>)session.getAttribute("filelist"); 
+  	   ArrayList<BoardDto> board =(ArrayList<BoardDto>)session.getAttribute("list");
+  	   ArrayList<BoardDto> totallist =(ArrayList<BoardDto>)session.getAttribute("totallist");
+  	   ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
+  	   ArrayList<FileDto> asidehashList = (ArrayList<FileDto>)session.getAttribute("asidehashlist");
+  	   ArrayList<ReplyDto> rlist = (ArrayList<ReplyDto>)session.getAttribute("listBoard");
+  	   int num_page_size = 5; //한 화면당 보여줄 게시물 수
+  	   int totalpage = (int)Math.ceil(totallist.size()/(double) num_page_size);
+  	   System.out.println("totalpage(main):"+totalpage);
+  	   String curpage = (String)session.getAttribute("page");
+  	   System.out.println("현재페이지(main):"+curpage);
+  	   int prev = (int)session.getAttribute("prev");
+	   System.out.println("prev페이지(main):"+prev);
+	   int next = (int)session.getAttribute("next");
+  	   System.out.println("next페이지(main):"+next);
     %>
 <!DOCTYPE html>
 <html>
@@ -322,7 +329,7 @@
                 <nav id="Main" aria-label="Page navigation example" style="width: 100%;">
                     <ul class="pagination">
                         <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
+                            <a class="page-link" href="main?page=<%=prev%>" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
@@ -330,7 +337,7 @@
 		                        <li class="page-item"><a class="page-link" href="main?page=<%=i%>"><%=i%></a></li>
 	                        <%}%>
                         <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
+                            <a class="page-link" href="main?page=<%=next%>" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
