@@ -18,13 +18,13 @@ public class LikeService implements ILikeService{
 	ILikeDao likeDao;
 	
 	@Override
-	public void likeUpdate(String bno, String id) {
-		likeDao.likeUpdateDao(Integer.parseInt(bno), id);
+	public void likeUpdate(String bno, String id, String writerId) {
+		likeDao.likeUpdateDao(Integer.parseInt(bno), id, writerId);
 	}
 
 	@Override
-	public void likeDelete(String bno, String id) {
-		likeDao.likeDeleteDao(Integer.parseInt(bno), id);
+	public void likeDelete(String bno, String id, String writerId) {
+		likeDao.likeDeleteDao(Integer.parseInt(bno), id, writerId);
 	}
 
 	@Override
@@ -40,8 +40,8 @@ public class LikeService implements ILikeService{
 	}
 
 	@Override
-	public ArrayList<LikeDto> likeList() {
-		ArrayList<LikeDto> likeList = likeDao.likeList();
+	public ArrayList<LikeDto> likeList(String name) {
+		ArrayList<LikeDto> likeList = likeDao.likeList(name);
 		return likeList;
 	}
 

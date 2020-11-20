@@ -13,13 +13,13 @@
 	
 	<!-- 게시글 추천 -->
 	<insert id="likeUpdateDao" parameterType="com.study.springboot.dto.LikeDto">
-		insert into like_rec (bno, id) 
-			values(#{param1}, #{param2})
+		insert into like_rec (bno, id, writerId) 
+			values(#{param1}, #{param2}, #{param3})
 	</insert>
 	
 	<!-- 게시글 추천 취소 -->
 	<delete id="likeDeleteDao" parameterType="com.study.springboot.dto.LikeDto">
-		delete from like_rec where bno = #{param1} and id = #{param2}
+		delete from like_rec where bno = #{param1} and id = #{param2} and writerId = #{param3}
 	</delete>
 	
 	<!-- 게시글 추천수 -->
@@ -28,7 +28,7 @@
 	</select>
 
 	<select id="likeList" resultType="com.study.springboot.dto.LikeDto"> 
-		select * from like_rec order by bno desc
+		select * from like_rec where writerId = #{param1}
    	</select> 
    	
 </mapper>

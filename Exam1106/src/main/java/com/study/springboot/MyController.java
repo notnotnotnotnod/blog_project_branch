@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.study.springboot.dto.BoardDto;
 import com.study.springboot.dto.FileDto;
+import com.study.springboot.dto.LikeDto;
 import com.study.springboot.dto.MemberDto;
 import com.study.springboot.dto.ReplyDto;
 import com.study.springboot.service.FileUploadService;
@@ -667,28 +668,22 @@ public class MyController {
 			
 			String bno = req.getParameter("bno");
 			String id = req.getParameter("id");
+			String writerId = req.getParameter("writerId");
 			
 			System.out.println("bno(mc)(likeupdate) = " + bno);
 			System.out.println("id(mc)(likeupdate) = " + id);
-			
-//			Map<String, Object> m = new HashMap<>();
-//			
-//			m.put("bno", bno);
-//			m.put("id", id);
-//			
-//			System.out.println("m_bno(mc)="+m.get("bno"));
-//			System.out.println("m_bno(id)="+m.get("id"));
+			System.out.println("writerId(mc)(likeupdate) = " + writerId);
 			
 			int nResult = like_service.likeCheck(bno, id);
 			System.out.println("nResult="+nResult);
 			
 			if( nResult == 0 ) {
-				like_service.likeUpdate(bno, id);
+				like_service.likeUpdate(bno, id, writerId);
 				model.addAttribute("msg","like 성공");
 				model.addAttribute("url","/main");
 				return "redirect";
 			}else {
-				like_service.likeDelete(bno, id);
+				like_service.likeDelete(bno, id, writerId);
 				model.addAttribute("msg","like 실패");
 				model.addAttribute("url","/main");
 				return "redirect";
@@ -706,5 +701,14 @@ public class MyController {
 			System.out.println("count(mc)(likeCount)="+count);
 				
 				return String.valueOf( count );
+		}
+		
+		@RequestMapping("/likeboard")
+		public String likeboard(HttpServletRequest req, Model model) throws Exception{
+			HttpSession session = req.getSession();
+			String name = (String)session.getAttribute("sessionID");
+			ArrayList<LikeDto> likelist = like_service.likeList(name);
+			session.setAttribute("likelist", likelist);		
+			return "likeboard";
 		}
 }

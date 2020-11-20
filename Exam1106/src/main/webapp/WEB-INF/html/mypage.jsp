@@ -44,7 +44,7 @@
               <a href="main" class="navigation__link">
                   <i class="fa fa-compass"></i>
               </a>
-              <a href="#" class="navigation__link">
+              <a href="likeboard" class="navigation__link">
                   <i class="fa fa-heart-o"></i>
               </a>
               <a href="mypage" class="navigation__link">

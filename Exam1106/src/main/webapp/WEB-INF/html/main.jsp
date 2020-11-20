@@ -103,12 +103,14 @@
     </style>
     
     <script>
-	    function likeup(i,k){
+	    function likeup(i,k,j){
 	    	console.log("likeupdateclick");
 			var bno = i;
 			var id = k;
+			var writerId = j;
 			console.log( bno );
 			console.log( id );
+			console.log( writerId );
 			console.log(i);
 			
 			$.ajax({
@@ -116,7 +118,8 @@
 				type: 'post',
 				data: {
                     bno: bno,
-                    id: id
+                    id: id,
+                    writerId: writerId
                 },
 				success : function(data) {
 					console.log("성공");
@@ -166,7 +169,7 @@
               <a href="main" class="navigation__link">
                   <i class="fa fa-compass"></i>
               </a>
-              <a href="#" class="navigation__link">
+              <a href="likeboard" class="navigation__link">
                   <i class="fa fa-heart-o"></i>
               </a>
               <a href="mypage" class="navigation__link">
@@ -265,7 +268,7 @@
 		                    	<input id="bno_value" type="hidden" value="<%=board.get(i).getBno()%>" >
 		                    	<% System.out.println(board.get(i).getBno()); %>
 						   		<input id="id_value" type="hidden" value=" <%=board.get(i).getBname()%>" >
-		                        <input type="button" class="like_update" value="좋아요" onclick="likeup(<%=board.get(i).getBno()%>,'<%= session.getAttribute("sessionID") %>')"> &nbsp;
+		                        <input type="button" class="like_update" value="좋아요" onclick="likeup(<%=board.get(i).getBno()%>,'<%= session.getAttribute("sessionID") %>', '<%=board.get(i).getBname()%>')"> &nbsp;
 								<span class="like_count<%=board.get(i).getBno()%>">like:</span>
 		                  	</div>
                          <hr>

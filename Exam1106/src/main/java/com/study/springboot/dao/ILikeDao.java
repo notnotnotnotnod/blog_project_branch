@@ -12,9 +12,9 @@ import com.study.springboot.dto.ReplyDto;
 public interface ILikeDao {
     
     public int likeCheckDao(int bno, String id);
-    public int likeUpdateDao(int bno, String id);
-    public int likeDeleteDao(int bno, String id);
+    public int likeUpdateDao(int bno, String id, String writerId);
+    public int likeDeleteDao(int bno, String id, String writerId);
     public int likeCountDao(int bno);
-	public ArrayList<LikeDto> likeList();
+	public ArrayList<LikeDto> likeList(String name);
     
 }

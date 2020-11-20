@@ -9,4 +9,5 @@ import lombok.Data;
 public class LikeDto {
 	private int bno;
 	private String id;
+	private String writerId;
 }
