@@ -249,7 +249,7 @@
 						<!-- 댓글 보기 / 쓰기 -->
                          	<form action="coment" method=post>
 	                         	<input type="hidden" id="bno" name="bno" value="<%=board.get(i).getBno()%>">
-	                         	<button class="btn btn-outline-secondary" type="submit" id="button-addon2">댓글 더보기</button>
+	                         	<button class="btn btn-outline-primary btn-sm" type="submit" id="button-addon2">댓글 더보기</button>
 	                        </form>
                          </li>
                          

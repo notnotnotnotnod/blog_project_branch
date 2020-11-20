@@ -14,7 +14,8 @@
 	ArrayList<FileDto> hashList = (ArrayList<FileDto>)session.getAttribute("hashlist");
 	ArrayList<ReplyDto> listBoard = (ArrayList<ReplyDto>)session.getAttribute("listBoard");
 	ArrayList<BoardDto> list = (ArrayList<BoardDto>)session.getAttribute("list");
-	
+	int num_page_size = 5; //한 화면당 보여줄 페이지 수
+	int totalpage = (int)Math.ceil(list.size()/(double) num_page_size);
 
 %>
 
@@ -249,13 +250,11 @@
                             <a class="page-link" href="#" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
-                        </li>
-	                        <li class="page-item"><a class="page-link" href="main?page=1">1</a></li>
-	                        <li class="page-item"><a class="page-link" href="main?page=2">2</a></li>
-	                        <li class="page-item"><a class="page-link" href="main?page=3">3</a></li>
-	                        <li class="page-item"><a class="page-link" href="main?page=4">4</a></li>
-	                        <li class="page-item"><a class="page-link" href="main?page=5">5</a></li>
-                        <li class="page-item">
+                         </li>
+                        	<%for(int i=1;i<=totalpage;i++){%>
+		                        <li class="page-item"><a class="page-link" href="main?page=<%=i%>"><%=i%></a></li>
+	                        <%}%>
+                         <li class="page-item">
                             <a class="page-link" href="#" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
