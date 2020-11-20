@@ -41,7 +41,7 @@
           </nav>
     </header>
     <main style="width: 50%; margin-left: 25%;">
-    <ul class="list-group">
+    <ul class="list-group" style="margin-top: 20%;">
     <%for(int i=0;i<list.size();i++){ %>
         <li class="list-group-item"> 
         <form method="post" action="modifyAction" >

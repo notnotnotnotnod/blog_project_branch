@@ -140,7 +140,11 @@
 	                },
 	                success: function(count) {
 	                	console.log("성공");
+	                	if(count!=0){
 	                	$(".like_count"+i).html("like:" + count);
+	                }else{
+	                	$(".like_count"+i).html(" ");
+	                }
 	                },	                
 				})
 		    };
