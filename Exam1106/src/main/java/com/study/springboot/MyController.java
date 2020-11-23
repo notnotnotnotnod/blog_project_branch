@@ -1,10 +1,7 @@
 package com.study.springboot;
-
 import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import com.study.springboot.dto.BoardDto;
 import com.study.springboot.dto.FileDto;
 import com.study.springboot.dto.LikeDto;
@@ -26,7 +22,6 @@ import com.study.springboot.service.ILikeService;
 import com.study.springboot.service.IMemberService;
 import com.study.springboot.service.IReplyService;
 import com.study.springboot.service.IWriteSetService;
-
 @Controller
 public class MyController {
 	
@@ -47,12 +42,10 @@ public class MyController {
 	
 	@Autowired
 	ILikeService like_service;
-
 	@RequestMapping("/")
 	public String root() throws Exception {
 		return "redirect:login";
 	}
-
 	@RequestMapping("/login")
 	public String login() throws Exception {
 		return "login";
@@ -128,25 +121,9 @@ public class MyController {
 		System.out.println("page(mc)="+page); //시작 페이지 넘버
 		if( page == null) page = "1";
 		if( page.length() < 1) page = "1";
+		System.out.println("page:"+page);
 		System.out.println("page(page가 null인지 확인):"+page);
-		
-		// 페이징의 prev와 next를 위한 부분
-		int num_page_size = 5;
-		int curPage = Integer.parseInt(page);
-		
-		int curBlock = (int)Math.ceil((curPage-1)/num_page_size)+1;
-		int blockBegin = (curBlock-1) * num_page_size+1;
-		if(curBlock>1) {
-			int prev = (curBlock-2) * num_page_size+1;
-			int next = blockBegin + num_page_size;
-			req.getSession().setAttribute("prev", prev);
-			req.getSession().setAttribute("next", next);
-		}else {
-			int prev = 1;
-			int next = 6;
-			req.getSession().setAttribute("prev", prev);
-			req.getSession().setAttribute("next", next);
-		}
+
 		
 		ArrayList<FileDto> hashlist = Write_service.hashtagList();
 		ArrayList<FileDto> asidehashlist = Write_service.aside_hashtagList();
@@ -163,10 +140,36 @@ public class MyController {
 		session.setAttribute("hashlist", hashlist);
 		session.setAttribute("listBoard", rlist);
 		req.getSession().setAttribute("page", page);
+		
+		// 페이징의 prev와 next를 위한 부분
+		int num_page_size = 5;
+		int curPage = Integer.parseInt(page);
+
+		int curBlock = (int)Math.ceil((curPage-1)/num_page_size)+1; //몇번째 단인지
+		int blockBegin = (curBlock-1) * num_page_size+1;
+		
+		if(curBlock>1) {
+			int prev = (curBlock-2) * num_page_size+1;
+			int next = blockBegin + num_page_size;
+			if(next>(int)Math.ceil(totallist.size()/(double) num_page_size)) {
+				next = (int)Math.ceil(totallist.size()/(double) num_page_size);
+			}
+			req.getSession().setAttribute("prev", prev);
+			req.getSession().setAttribute("next", next);
+		}else {
+			int prev = 1;
+			int next = 6;
+			if(next>(int)Math.ceil(totallist.size()/(double) num_page_size)) {
+				next = (int)Math.ceil(totallist.size()/(double) num_page_size);
+			}
+			req.getSession().setAttribute("prev", prev);
+			req.getSession().setAttribute("next", next);
+		}
+
+		
 	
 		return "main";
 	}
-
 	@RequestMapping("/findId")
 	public String findId() throws Exception {
 		return "findId";
@@ -274,7 +277,6 @@ public class MyController {
 			
 	        model.addAttribute("msg","로그인 실패 - 아이디나 암호를 확인해주세요");
 	        model.addAttribute("url","/login");
-
 		}else {
 			System.out.println("로그인 성공");
 			
@@ -285,7 +287,6 @@ public class MyController {
 	   		
 			model.addAttribute("msg","로그인 성공");
             model.addAttribute("url","/main");
-
 		}
 		return "redirect";
 		 //redirect.jsp
@@ -336,13 +337,11 @@ public class MyController {
 			
 			model.addAttribute("msg","회원수정 실패");
 			model.addAttribute("url","/mypage");
-
 		}else {
 			System.out.println("회원수정 성공");
 			
 			model.addAttribute("msg","회원수정 성공");
 			model.addAttribute("url","/main");
-
 		}
 	return "redirect";
 	}
@@ -460,7 +459,6 @@ public class MyController {
 		session.setAttribute("filelist", filelist);
 		
 		
-
 		
 		
 		System.out.println(bname);
@@ -486,8 +484,6 @@ public class MyController {
 		
 		return "redirect";
 	}
-
-
 	@RequestMapping("/FindIdAction")
 	public String FindIdAction(HttpServletRequest req, Model model) {
 		String name = req.getParameter("name");
@@ -532,7 +528,6 @@ public class MyController {
 		}	
             return "findPwResult";
 		}
-
 	@RequestMapping("/coment")
 	public String coment(HttpServletRequest req) throws Exception {
 		HttpSession session = req.getSession();
@@ -575,7 +570,6 @@ public class MyController {
 			
 			model.addAttribute("msg","회원탈퇴 실패");
 			model.addAttribute("url","/dropout");
-
 		}else {
 			System.out.println("회원탈퇴 성공");
 			
@@ -583,7 +577,6 @@ public class MyController {
 			
 			model.addAttribute("msg","회원탈퇴 성공");
 			model.addAttribute("url","/login");
-
 		}
 		return "redirect";
 	}

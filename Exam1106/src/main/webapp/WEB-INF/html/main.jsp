@@ -25,6 +25,10 @@
 	   System.out.println("prev페이지(main):"+prev);
 	   int next = (int)session.getAttribute("next");
   	   System.out.println("next페이지(main):"+next);
+  	   
+  	   // 총 페이지 넘기는 갯수.
+  	   int pagenumber = (totalpage-(totalpage%5))/5+1; 
+  	   
     %>
 <!DOCTYPE html>
 <html>
@@ -333,9 +337,20 @@
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        	<%for(int i=1;i<=totalpage;i++){%>
+                        
+                        	<%
+                        	//이전페이지랑 다음페이지 수정.
+                        		if(totalpage<5){
+                        			for(int i=1;i<=totalpage;i++){
+                        				%><li class="page-item"><a class="page-link" href="main?page=<%=i%>"><%=i%></a></li>
+                        			<% }}
+                        		else{if(next==totalpage){
+                        				for(int i=totalpage-4;i<=totalpage;i++){
+                        					%><li class="page-item"><a class="page-link" href="main?page=<%=i%>"><%=i%></a></li><%
+                        				}}else{
+                        				for(int i=next-5;i<next;i++){%>
 		                        <li class="page-item"><a class="page-link" href="main?page=<%=i%>"><%=i%></a></li>
-	                        <%}%>
+	                        <%}}}%>
                         <li class="page-item">
                             <a class="page-link" href="main?page=<%=next%>" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
